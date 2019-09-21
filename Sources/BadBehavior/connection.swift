@@ -103,14 +103,14 @@ class LogTenProXDatabase {
 
         // flight columns
         let actualInstrumentTime = Expression<Int?>("ZFLIGHT_ACTUALINSTRUMENT")
-        let nightFullStops = Expression<Int>("ZFLIGHT_CUSTOMLANDING5")
+        let nightFullStops = Expression<Int?>("ZFLIGHT_CUSTOMLANDING5")
         let dayLandings = Expression<Int?>("ZFLIGHT_DAYLANDINGS")
         let dayTakeoffs = Expression<Int?>("ZFLIGHT_DAYTAKEOFFS")
         let holds = Expression<Int?>("ZFLIGHT_HOLDS")
         let nightTime = Expression<Int>("ZFLIGHT_NIGHT")
         let nightLandings = Expression<Int?>("ZFLIGHT_NIGHTLANDINGS")
         let nightTakeoffs = Expression<Int?>("ZFLIGHT_NIGHTTAKEOFFS")
-        let PICTime = Expression<Int>("ZFLIGHT_PIC")
+        let PICTime = Expression<Int?>("ZFLIGHT_PIC")
         let flightReview = Expression<Bool>("ZFLIGHT_REVIEW")
         let IPC = Expression<Bool>("ZFLIGHT_INSTRUMENTPROFICIENCYCHECK")
         let aircraftID = Expression<Int>("ZFLIGHT_AIRCRAFT")
@@ -163,7 +163,7 @@ class LogTenProXDatabase {
             .join(passengers, on: passengersFlightID == flights[primaryKey])
 
         for row in try db.prepare(query) {
-            let PICTimeHours = Float(row[PICTime])/60.0
+            let PICTimeHours = Float(row[PICTime] ?? 0)/60.0
             let nightTimeHours = Float(row[nightTime])/60.0
             let actualTimeHours = Float(row[actualInstrumentTime] ?? 0)/60.0
             let dualReceivedTimeHours = Float(row[dualReceived] ?? 0)/60.0
@@ -189,7 +189,8 @@ class LogTenProXDatabase {
                                 PICTime: PICTimeHours, actualInstrumentTime: actualTimeHours, nightTime: nightTimeHours, dualReceivedTime: dualReceivedTimeHours, soloTime: soloTimeHours,
                                 dayLandings: row[dayLandings] ?? 0, nightLandings: row[nightLandings] ?? 0,
                                 dayTakeoffs: row[dayTakeoffs] ?? 0, nightTakeoffs: row[nightTakeoffs] ?? 0,
-                                fullStops: row[fullStops], nightFullStops: row[nightFullStops],
+                                fullStops: row[fullStops],
+                                nightFullStops: row[nightFullStops] ?? 0,
                                 approachesCount: totalApproaches, holdsCount: row[holds] ?? 0,
                                 hasPassengers: (row[pax1] != nil), hasSIC: (row[SICID] != nil))
             block(flight)
