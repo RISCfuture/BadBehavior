@@ -65,7 +65,7 @@ class LogTenProXDatabase {
         let originLID: String?
         let destinationLID: String?
 
-        let remarks: String
+        let remarks: String?
         let flightReview: Bool
         let IPC: Bool
 
@@ -185,7 +185,7 @@ class LogTenProXDatabase {
 
             let flight = Flight(date: parsedDate, airplaneRegistration: row[registration],
                                 originLID: row[origin[LID]], destinationLID: row[destination[LID]],
-                                remarks: row[remarks], flightReview: row[flightReview], IPC: row[IPC],
+                                remarks: try? row.get(remarks), flightReview: row[flightReview], IPC: row[IPC],
                                 PICTime: PICTimeHours, actualInstrumentTime: actualTimeHours, nightTime: nightTimeHours, dualReceivedTime: dualReceivedTimeHours, soloTime: soloTimeHours,
                                 dayLandings: row[dayLandings] ?? 0, nightLandings: row[nightLandings] ?? 0,
                                 dayTakeoffs: row[dayTakeoffs] ?? 0, nightTakeoffs: row[nightTakeoffs] ?? 0,

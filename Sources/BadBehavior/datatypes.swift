@@ -32,7 +32,7 @@ class Aircraft {
 class Flight {
     let aircraft: Aircraft
     let date: Date
-    let remarks: String
+    let remarks: String?
 
     let origin: String?
     let destination: String?
@@ -61,7 +61,7 @@ class Flight {
 
     var countsForIFRCurrency: Bool?
 
-    init(aircraft: Aircraft, date: Date, remarks: String, origin: String?,
+    init(aircraft: Aircraft, date: Date, remarks: String?, origin: String?,
          destination: String?, PIC: Bool, trainingFlight: Bool,
          passengers: Bool, night: Bool, IFR: Bool, studentSolo: Bool,
          safetyPilotOnboard: Bool, totalTakeoffs: UInt, totalLandings: UInt,

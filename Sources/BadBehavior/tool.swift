@@ -75,7 +75,7 @@ class CommandLineTool {
     private func convertFlightRowToFlight(_ row: LogTenProXDatabase.Flight) -> Flight? {
         guard let a = aircraft.first(where: { $0.registration == row.airplaneRegistration }) else { return nil }
 
-        let hasSafetyPilot = (row.hasSIC && row.remarks.localizedCaseInsensitiveContains("safety"))
+        let hasSafetyPilot = (row.hasSIC && row.remarks != nil && row.remarks!.localizedCaseInsensitiveContains("safety"))
 
         return Flight(aircraft: a,
                       date: row.date,
@@ -121,7 +121,7 @@ class CommandLineTool {
             if (!BFRCurrency && !paxCurrency && !nightPaxCurrency && !IFRCurrency) { continue }
 
             print("\(CommandLineTool.datePrinter.string(from: flight.date)) \(flight.aircraft.registration) \(flight.origin ?? "???") → \(flight.destination ?? "???")")
-            print(flight.remarks)
+            if (flight.remarks != nil) { print(flight.remarks!) }
             print("")
 
             if BFRCurrency { print(" - Flight review not accomplished within prior 24 calendar months") }
