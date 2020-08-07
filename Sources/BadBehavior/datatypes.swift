@@ -11,12 +11,14 @@ class Aircraft {
 
     enum Category {
         case airplane
+        case glider
     }
 
     enum Class {
         case singleEngineLand
         case singleEngineSea
         case multiEngineLand
+        case multiEngineSea
     }
 
     init(registration: String, type: String, category: Category, class: Class,

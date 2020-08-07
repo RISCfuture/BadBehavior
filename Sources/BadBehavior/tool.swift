@@ -45,13 +45,15 @@ class CommandLineTool {
     }
 
     private static let categories = [
-        210: Aircraft.Category.airplane
+        210: Aircraft.Category.airplane,
+        581: Aircraft.Category.glider
     ]
 
     private static let classes = [
         321: Aircraft.Class.singleEngineLand,
         146: Aircraft.Class.singleEngineSea,
-        680: Aircraft.Class.multiEngineLand
+        680: Aircraft.Class.multiEngineLand,
+        97: Aircraft.Class.multiEngineSea
     ]
 
     private func convertAircraftRowToAircraft(_ row: LogTenProXDatabase.Aircraft) -> Aircraft {
