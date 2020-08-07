@@ -20,7 +20,7 @@ currency.
 
 This script is a Swift Package Manager 4.0 package. Simply run `swift run` from
 the command line within the package directory to build and run the script. You
-will need Swift 4.
+will need at least Swift 4.
 
 ## Requirements
 
@@ -56,7 +56,7 @@ The script may need to be modified to suit your needs in the following ways:
   your custom field.
 * The script contains a mapping of LogTen Pro category/class IDs to aircraft
   categories and classes. (For example, the Airplane category is ID 502.)
-  I only fly ASEL, AMEL, and ASES aircraft. If you fly other types of aircraft,
+  I only fly airplanes and gliders. If you fly other categories of aircraft,
   you will need to modify the `categories` and `classes` statics on the
   `CommandLineTool` class.
 
