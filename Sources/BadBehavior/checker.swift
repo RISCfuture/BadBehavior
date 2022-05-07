@@ -16,7 +16,7 @@ class Checker {
         if flight.trainingFlight || !flight.PIC { return false }
         if flight.studentSolo || flight.BFR { return false }
 
-        let eligibleFlights = flightsWithinLast(calendarMonths: 24, matchingCategory: true)
+        let eligibleFlights = flightsWithinLast(calendarMonths: 24)
         return eligibleFlights.first { $0.BFR } == nil
     }
 
