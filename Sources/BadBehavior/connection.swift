@@ -16,8 +16,14 @@ class LogTenProXDatabase {
         let type: String
         let category: Int
         let `class`: Int?
+        let simType: String?
+        let simCategoryClass: String?
+        let simAircraftType: String?
 
         let tailwheel: Bool
+        
+        let engineType: Int?
+        let weight: Double?
     }
 
     func eachAircraft(block: (Aircraft) -> Void) throws {
@@ -31,18 +37,32 @@ class LogTenProXDatabase {
         let tailwheel = Expression<Bool?>("ZAIRCRAFT_TAILWHEEL")
         let registration = Expression<String>("ZAIRCRAFT_AIRCRAFTID")
         let aircraftTypeFKey = Expression<Int>("ZAIRCRAFT_AIRCRAFTTYPE")
+        let weight = Expression<Double?>("ZAIRCRAFT_WEIGHT")
 
         // type columns
         let `class` = Expression<Int?>("ZAIRCRAFTTYPE_AIRCRAFTCLASS")
         let category = Expression<Int>("ZAIRCRAFTTYPE_CATEGORY")
         let type = Expression<String>("ZAIRCRAFTTYPE_TYPE")
+        let simType = Expression<String?>("ZAIRCRAFTTYPE_CUSTOMATTRIBUTE1")
+        let simAircraftType = Expression<String?>("ZAIRCRAFTTYPE_CUSTOMATTRIBUTE2")
+        let simAircraftCatClass = Expression<String?>("ZAIRCRAFTTYPE_CUSTOMATTRIBUTE3")
+        let engineType = Expression<Int?>("ZAIRCRAFTTYPE_ENGINETYPE")
 
         let query = aircraftTable
-            .select(aircraftTable[registration], category, `class`, tailwheel, type)
+            .select(aircraftTable[registration], category, `class`, tailwheel, type, simType, simAircraftType, simAircraftCatClass, weight, engineType)
             .join(aircraftTypes, on: aircraftTypes[primaryKey] == aircraftTypeFKey)
 
         for row in try db.prepare(query) {
-            let aircraft = Aircraft(registration: row[registration], type: row[type], category: row[category], class: row[`class`], tailwheel: (row[tailwheel] != nil && row[tailwheel]!))
+            let aircraft = Aircraft(registration: row[registration],
+                                    type: row[type],
+                                    category: row[category],
+                                    class: row[`class`],
+                                    simType: row[simType],
+                                    simCategoryClass: row[simAircraftCatClass],
+                                    simAircraftType: row[simAircraftType],
+                                    tailwheel: (row[tailwheel] != nil && row[tailwheel]!),
+                                    engineType: row[engineType],
+                                    weight: row[weight])
             block(aircraft)
         }
     }

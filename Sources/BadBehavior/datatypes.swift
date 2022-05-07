@@ -6,12 +6,19 @@ class Aircraft {
     let type: String
     let category: Category
     let `class`: Class
+    let simType: SimType?
+    let simCategory: Category?
+    let simClass: Class?
 
     let tailwheel: Bool
+    
+    let engineType: EngineType?
+    let weight: Float?
 
     enum Category {
         case airplane
         case glider
+        case simulator
     }
 
     enum Class {
@@ -20,14 +27,44 @@ class Aircraft {
         case multiEngineLand
         case multiEngineSea
     }
+    
+    enum SimType {
+        case BATD, AATD, FTD, FFS
+    }
+    
+    enum EngineType {
+        case reciprocating
+        case turbofan
+    }
 
     init(registration: String, type: String, category: Category, class: Class,
-         tailwheel: Bool) {
+         simCategoryClass: String?, simType: SimType?, tailwheel: Bool, engineType: EngineType?, weight: Float?) {
         self.registration = registration
         self.type = type
         self.category = category
         self.`class` = `class`
         self.tailwheel = tailwheel
+        self.simType = simType
+        self.engineType = engineType
+        self.weight = weight
+        
+        switch simCategoryClass {
+            case "ASEL":
+                simCategory = .airplane
+                simClass = .singleEngineLand
+            case "ASES":
+                simCategory = .airplane
+                simClass = .singleEngineSea
+            case "AMEL":
+                simCategory = .airplane
+                simClass = .multiEngineLand
+            case "AMES":
+                simCategory = .airplane
+                simClass = .multiEngineSea
+            default:
+                simCategory = nil
+                simClass = nil
+        }
     }
 }
 

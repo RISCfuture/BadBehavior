@@ -24,7 +24,7 @@ class Checker {
         if flight.trainingFlight || !flight.PIC { return false }
         if !flight.passengers { return false }
 
-        let eligibleFlights = flightsWithinLast(days: 90, matchingCategory: true, matchingClass: true)
+        let eligibleFlights = flightsWithinLast(days: 90, matchingCategory: true, matchingClass: true, matchingTypeIfRequired: true)
         let totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.totalTakeoffs }
         let totalLandings = eligibleFlights.reduce(0) { $0 + $1.totalLandings }
         if totalTakeoffs < 3 || totalLandings < 3 { return true }
@@ -44,7 +44,7 @@ class Checker {
         if !flight.passengers { return false }
         if !flight.night { return false }
 
-        let eligibleFlights = flightsWithinLast(days: 90, matchingCategory: true, matchingClass: true)
+        let eligibleFlights = flightsWithinLast(days: 90, matchingCategory: true, matchingClass: true, matchingTypeIfRequired: true)
         let totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.nightTakeoffs }
         let totalLandings = eligibleFlights.reduce(0) { $0 + $1.nightFullStopLandings }
         if totalTakeoffs < 3 || totalLandings < 3 { return true }
@@ -99,27 +99,28 @@ class Checker {
         return flight.countsForIFRCurrency!
     }
 
-    private func flightsWithinLast(days: Int, matchingCategory: Bool = false, matchingClass: Bool = false) -> Array<Flight> {
-        return flightsWithinLast(days: days, ofFlight: self.flight, matchingCategory: matchingCategory, matchingClass: matchingClass)
+    private func flightsWithinLast(days: Int, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) -> Array<Flight> {
+        return flightsWithinLast(days: days, ofFlight: self.flight, matchingCategory: matchingCategory, matchingClass: matchingClass, matchingTypeIfRequired: matchingTypeIfRequired)
     }
 
-    private func flightsWithinLast(days: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false) -> Array<Flight> {
+    private func flightsWithinLast(days: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) -> Array<Flight> {
         var referenceDate = Calendar.current.date(byAdding: .day, value: -days, to: flight.date)!
         referenceDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: referenceDate)!
 
         return caller.flights.filter {
             $0 !== flight &&
                 (referenceDate...flight.date).contains($0.date) &&
-                (!matchingCategory || flight.aircraft.category == $0.aircraft.category) &&
-                (!matchingClass || flight.aircraft.`class` == $0.aircraft.`class`)
+            (!matchingCategory || matchesCategory(currentAircraft: flight.aircraft, pastAircraft: $0.aircraft)) &&
+            (!matchingClass || matchesClass(currentAircraft: flight.aircraft, pastAircraft: $0.aircraft)) &&
+            (!matchingTypeIfRequired || !typeRatingRequired(flight.aircraft) || matchesType(currentAircraft: flight.aircraft, pastAircraft: $0.aircraft))
         }
     }
 
-    private func flightsWithinLast(calendarMonths: Int, matchingCategory: Bool = false, matchingClass: Bool = false) -> Array<Flight> {
-        return flightsWithinLast(calendarMonths: calendarMonths, ofFlight: self.flight, matchingCategory: matchingCategory, matchingClass: matchingClass)
+    private func flightsWithinLast(calendarMonths: Int, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) -> Array<Flight> {
+        return flightsWithinLast(calendarMonths: calendarMonths, ofFlight: self.flight, matchingCategory: matchingCategory, matchingClass: matchingClass, matchingTypeIfRequired: matchingTypeIfRequired)
     }
 
-    private func flightsWithinLast(calendarMonths: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false) -> Array<Flight> {
+    private func flightsWithinLast(calendarMonths: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) -> Array<Flight> {
         var referenceDate = Calendar.current.date(byAdding: .month, value: -calendarMonths, to: flight.date)!
         var components = Calendar.current.dateComponents([.year, .month, .day], from: referenceDate)
         components.day = 1
@@ -128,9 +129,45 @@ class Checker {
         return caller.flights.filter {
             $0 !== flight &&
                 (referenceDate...flight.date).contains($0.date) &&
-                (!matchingCategory || flight.aircraft.category == $0.aircraft.category) &&
-                (!matchingClass || flight.aircraft.`class` == $0.aircraft.`class`)
+            (!matchingCategory || matchesCategory(currentAircraft: flight.aircraft, pastAircraft: $0.aircraft)) &&
+            (!matchingClass || matchesClass(currentAircraft: flight.aircraft, pastAircraft: $0.aircraft)) &&
+            (!matchingTypeIfRequired || !typeRatingRequired(flight.aircraft) || matchesType(currentAircraft: flight.aircraft, pastAircraft: $0.aircraft))
         }
+    }
+    
+    private func matchesCategory(currentAircraft: Aircraft, pastAircraft: Aircraft) -> Bool {
+        if currentAircraft.category == .simulator { return true }
+        if currentAircraft.category == pastAircraft.category { return true }
+        if pastAircraft.category == .simulator && pastAircraft.simType == .FFS {
+            return pastAircraft.simCategory == currentAircraft.category
+        }
+        return false
+    }
+    
+    private func matchesClass(currentAircraft: Aircraft, pastAircraft: Aircraft) -> Bool {
+        if currentAircraft.class == pastAircraft.class { return true }
+        if pastAircraft.category == .simulator && pastAircraft.simType == .FFS {
+            return pastAircraft.simClass == currentAircraft.class
+        }
+        return false
+    }
+    
+    private func matchesType(currentAircraft: Aircraft, pastAircraft: Aircraft) -> Bool {
+        if currentAircraft.type == pastAircraft.type { return true }
+        if pastAircraft.category == .simulator && pastAircraft.simType == .FFS {
+            return pastAircraft.type == currentAircraft.type
+        }
+        return false
+    }
+    
+    private func typeRatingRequired(_ aircraft: Aircraft) -> Bool {
+        guard let engineType = aircraft.engineType else { return false }
+        if engineType == .turbofan { return true }
+        
+        guard let weight = aircraft.weight else { return false }
+        if weight > 12500 { return true }
+        
+        return false
     }
 
     private func precalculateIFRCurrency() {

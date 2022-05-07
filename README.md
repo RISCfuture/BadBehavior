@@ -30,8 +30,9 @@ normal location.
 
 Your logbook must also conform to the following:
 
-* You must be recording night full-stop landings for tailwheel currency.
-  (Currently this is not a default field in LogTen Pro.)
+* You must be recording night full-stop landings for tailwheel currency as
+  custom landing field #5. (Currently this is not a default field in LogTen
+  Pro.)
 * You must not have any value in the Solo hours field for any flights after you
   attained your first private/sport certificate. This script uses the presence
   of solo hours to determine if the flight was a student pilot solo flight.
@@ -40,6 +41,16 @@ Your logbook must also conform to the following:
 * You must not be logging instrument approaches that do not have at least some
   amount of IMC after the FAF. The FAA says you cannot log approaches for which
   the final segment is done entirely in VMC.
+* You must be filling out the Weight field for aircraft with a max gross
+  weight greater than 12,500 pounds. You must be filling out the Engine Type
+  field for turbofan aircraft. (See below for turbojet aircraft.)
+* If you train in a full flight simulator, you must configure the simulator with
+  type Simulator, and set your custom fields as follows:
+  * Custom field #1 should be the sim type ("FFS" if it's a full flight sim).
+  * Custom field #2 should be the sim aircraft type, if it simulates an aircraft
+    with a required type rating.
+  * Custom field #3 should be the sim aircraft category and class ("ASEL",
+    "AMEL", "ASES", and "AMES" are the supported values).
 
 ## Limitations
 
@@ -54,11 +65,16 @@ The script may need to be modified to suit your needs in the following ways:
 * I use field "Custom Landing 5" to record my night full-stop landings. You will
   have to modify the `LogTenProXDatabase#eachFlight` method and change it to
   your custom field.
+* I use the first three custom fields on aircraft type to record simulator
+  information. See above for details.
 * The script contains a mapping of LogTen Pro category/class IDs to aircraft
   categories and classes. (For example, the Airplane category is ID 502.)
   I only fly airplanes and gliders. If you fly other categories of aircraft,
   you will need to modify the `categories` and `classes` statics on the
   `CommandLineTool` class.
+* The script contains a mapping of LogTenPro engine types. I only fly
+  reciprocating and turbofan aircraft. If you fly turbojet aircrft, you will
+  need to expand the `CommandLineTool.engineTypes` static.
 
 ### Modifications to be made to your logbook
 
@@ -97,6 +113,11 @@ negatives:
   are checked. The law is unclear about which time zone should be used for
   determining this 90-day window, especially if the night portion of the flight
   being checked crossed multiple time zones.
+* It will mark flights as non-compliant if a flight consists of multiple legs
+  logged as one flight, and one of the legs brings you into compliance. For
+  example, if you do your three takeoffs and landings solo, then go pick up
+  passengers for the next leg, logging both legs as a single flight, it will
+  mark that flight as non-compliant.
 
 ## Help Me!
 

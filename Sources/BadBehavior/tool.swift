@@ -46,7 +46,8 @@ class CommandLineTool {
 
     private static let categories = [
         210: Aircraft.Category.airplane,
-        581: Aircraft.Category.glider
+        581: Aircraft.Category.glider,
+        100: Aircraft.Category.simulator
     ]
 
     private static let classes = [
@@ -55,13 +56,33 @@ class CommandLineTool {
         680: Aircraft.Class.multiEngineLand,
         97: Aircraft.Class.multiEngineSea
     ]
+    
+    private static let simTypes: Dictionary<String, Aircraft.SimType> = [
+        "BATD": .BATD,
+        "AATD": .AATD,
+        "FTD": .FTD,
+        "FFS": .FFS
+    ]
+    
+    private static let engineTypes: Dictionary<Int, Aircraft.EngineType> = [
+        244: .reciprocating,
+        676: .turbofan
+    ]
 
     private func convertAircraftRowToAircraft(_ row: LogTenProXDatabase.Aircraft) -> Aircraft {
+        let weight: Float? = row.weight != nil ? Float(row.weight!) : nil
+        let simType: Aircraft.SimType? = row.simType != nil ? Self.simTypes[row.simType!] : nil
+        let engineType: Aircraft.EngineType? = row.engineType != nil ? Self.engineTypes[row.engineType!] : nil
+        
         return Aircraft(registration: row.registration,
                         type: row.type,
-                        category: CommandLineTool.categories[row.category]!,
-                        class: CommandLineTool.classes[row.`class`!]!,
-                        tailwheel: row.tailwheel)
+                        category: Self.categories[row.category]!,
+                        class: Self.classes[row.`class`!]!,
+                        simCategoryClass: row.simCategoryClass,
+                        simType: simType,
+                        tailwheel: row.tailwheel,
+                        engineType: engineType,
+                        weight: weight)
     }
 
     // MARK: Flights
