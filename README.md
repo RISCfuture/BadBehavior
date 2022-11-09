@@ -1,8 +1,8 @@
 # Bad Behavior
 
-This Swift executable scans your LogTen Pro X for Mac logbook, looking for any
-flights that may have been contrary to FAR part 91 regulations. In particular,
-it attempts to locate the following flights:
+This Swift executable scans your LogTen for Mac logbook, looking for any flights
+that may have been contrary to FAR part 91 regulations. In particular, it
+attempts to locate the following flights:
 
 * Flights made outside of the 24-month window following a BFR.
 * Flights with passengers made without the required takeoffs and landings within
@@ -12,6 +12,8 @@ it attempts to locate the following flights:
   requirements).
 * IFR flights made with fewer than six approaches and one hold in the preceding
   six months (and no IPC accomplished).
+* Flights in type-rated aircraft without the required FAR 61.58 check having
+  been completed.
 
 It prints to the terminal a list of such flights and the reasons they are out of
 currency.
@@ -24,21 +26,22 @@ will need at least Swift 4.
 
 ## Requirements
 
-This script is built to work with the logbook created by LogTen Pro X for macOS.
-You must have that application installed and your logbook must be saved in the
+This script is built to work with the logbook created by LogTen for macOS. You
+must have that application installed and your logbook must be saved in the
 normal location.
 
-Your logbook must also conform to the following:
+Your logbook must also conform to the following (or the code should be
+modified):
 
 * You must be recording night full-stop landings for tailwheel currency as
-  custom landing field #5. (Currently this is not a default field in LogTen
-  Pro.)
+  custom landing field #5. (Currently this is not a default field in LogTen.)
 * You must not have any value in the Solo hours field for any flights after you
   attained your first private/sport certificate. This script uses the presence
   of solo hours to determine if the flight was a student pilot solo flight.
-* You must not be logging visual approaches. LogTen Pro X counts these as
-  approaches for currency but the FAA does not.
+* You must not be logging approaches if you were not the pilot flying or the
+  CFI.
 * You must not be logging instrument approaches that do not have at least some
+  amount of IMC after the FAF. The FAA says you cannot log approaches for which
   amount of IMC after the FAF. The FAA says you cannot log approaches for which
   the final segment is done entirely in VMC.
 * You must be filling out the Weight field for aircraft with a max gross
@@ -51,6 +54,10 @@ Your logbook must also conform to the following:
     with a required type rating.
   * Custom field #3 should be the sim aircraft category and class ("ASEL",
     "AMEL", "ASES", and "AMES" are the supported values).
+* LogTen has no "safety pilot" field by default. Custom Crew field #1 must be
+  allocated to the safety pilot.
+* LogTen has no "FAR 61.58" field by default. Custom Note #1 must be "Y" for
+  flights that qualify as FAR 61.58 checkrides.
 
 ## Limitations
 
@@ -67,27 +74,19 @@ The script may need to be modified to suit your needs in the following ways:
   your custom field.
 * I use the first three custom fields on aircraft type to record simulator
   information. See above for details.
-* The script contains a mapping of LogTen Pro category/class IDs to aircraft
+* LogTen has no "safety pilot" field by default. Custom Crew field #1 must be
+  allocated to the safety pilot.
+* The script contains a mapping of LogTen category/class IDs to aircraft
   categories and classes. (For example, the Airplane category is ID 502.)
   I only fly airplanes and gliders. If you fly other categories of aircraft,
   you will need to modify the `categories` and `classes` statics on the
-  `CommandLineTool` class.
-* The script contains a mapping of LogTenPro engine types. I only fly
-  reciprocating and turbofan aircraft. If you fly turbojet aircrft, you will
-  need to expand the `CommandLineTool.engineTypes` static.
+  `BadBehavior` class.
 
 ### Modifications to be made to your logbook
 
-You may need to adjust the values in your logbook in the following ways:
+You may need to adjust the values in your logbook in the following ways (or
+modify the code):
 
-* LogTen Pro X has no "safety pilot" field, so there's no way to know for sure
-  if the approaches that were made were done in VMC, under the hood, with a
-  safety pilot; or if they were done (potentially illegally) in actual. To get
-  around this, the script simply verifies that two crewmembers were onboard
-  (acting as PIC/P1 and SIC/P2), and that the remarks contain the words "safety
-  pilot" (since you legally must log the name of the safety pilot in the
-  remarks). If those conditions are met, a flight made within the 12-month
-  currency period + "grace period" counts towards IFR currency.
 * Your instrument checkride must be labeled as an IPC in order to prevent it
   from being flagged as illegal.
 
@@ -100,9 +99,9 @@ negatives:
   by assuming that a flight is IFR if you flew at least one approach or got at
   least 0.1 of actual. If you make an illegal IFR flight "in the system", but on
   a clear day with a visual approach, the script will not catch it.
-  * LogTen Pro X does have an "IFR time" field where you can record time spent
-    in the system. This field could be used to fix this problem, but I don't
-    record IFR time, because I have no regulatory reason to do so.
+  * LogTen does have an "IFR time" field where you can record time spent in the
+    system. This field could be used to fix this problem, but I don't record IFR
+    time, because I have no regulatory reason to do so.
 * If you failed a private or sport pilot checkride, the script will claim you
   flew without a BFR. This is because the checkride attempt does not count as
   dual received, is not a flight review, and does not earn you solo hours, and
