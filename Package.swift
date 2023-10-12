@@ -1,11 +1,11 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 
 import PackageDescription
 
 let package = Package(
     name: "BadBehavior",
     defaultLocalization: "en",
-    platforms: [.macOS(.v10_15)],
+    platforms: [.macOS(.v14)],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0"),
         .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.2.0")
