@@ -8,16 +8,16 @@ fileprivate let referenceDate: Date = {
 }()
 
 enum Category: Int, RawRepresentable {
-    case airplane = 210
-    case glider = 581
-    case simulator = 100
+    case airplane = 175
+    case glider = 625
+    case simulator = 216
 }
 
 enum Class: Int, RawRepresentable {
-    case singleEngineLand = 321
-    case singleEngineSea = 146
-    case multiEngineLand = 680
-    case multiEngineSea = 97
+    case singleEngineLand = 363
+    case singleEngineSea = 616
+    case multiEngineLand = 669
+    case multiEngineSea = 415
 }
 
 enum SimulatorType: String, RawRepresentable {
@@ -77,7 +77,7 @@ public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
     var nightTakeoffs: Int { flight.nightTakeoffs ?? 0 }
     var nightFullStopLandings: Int { flight.nightFullStopLandings ?? 0 }
     var tailwheel: Bool { aircraft.tailwheel ?? false }
-    var night: Bool { flight.nightTime > 0 }
+    var night: Bool { flight.nightTime == nil ? false : flight.nightTime! > 0 }
     var IFR: Bool { (flight.actualInstrumentTime ?? 0) > 0 || hasApproaches }
     var safetyPilotOnboard: Bool { crew?.safetyPilot != nil }
     var approachCount: Int { approaches?.count ?? 0 }

@@ -10,7 +10,7 @@ struct Flight: Identifiable {
     var date: Int
     
     var PICTime: Int?
-    var nightTime: Int
+    var nightTime: Int?
     var actualInstrumentTime: Int?
     var dualReceivedTime: Int?
     var soloTime: Int?

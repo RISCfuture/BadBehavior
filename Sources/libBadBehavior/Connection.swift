@@ -12,7 +12,7 @@ public class Connection {
     
     // MARK: Logbook
     
-    private static let logbookSubpath = "Containers/com.coradine.LogTenProX/Data/Documents/LogTenProData/LogTenCoreDataStore.sql"
+    private static let logbookSubpath = "Group Containers/group.com.coradine.LogTenPro/LogTenProData_6583aa561ec1cc91302449b5/LogTenCoreDataStore.sql"
     
     public static func defaultLogbookPath() throws -> String {
         let URLs = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)
