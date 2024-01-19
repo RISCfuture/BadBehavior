@@ -52,9 +52,9 @@ struct BadBehavior: AsyncParsableCommand {
         return formatter
     }
     
-    private var missingAirportID: String { t("????", comment: "missing airport ID") }
-    private var flightFormat: String { t("%@ %@ %@ → %@", comment: "flight info string [date, registration, origin, destination]") }
-    private var violationFormat: String { t("- %@", comment: "violation list item") }
+    private var missingAirportID: String { NSLocalizedString("????", bundle: Bundle.module, comment: "missing airport ID") }
+    private var flightFormat: String { NSLocalizedString("%@ %@ %@ → %@", bundle: Bundle.module, comment: "flight info string [date, registration, origin, destination]") }
+    private var violationFormat: String { NSLocalizedString("- %@", bundle: Bundle.module, comment: "violation list item") }
     
     private func string(from flight: FlightInfo) -> String {
         String(format: flightFormat,
@@ -67,21 +67,17 @@ struct BadBehavior: AsyncParsableCommand {
     private func string(from violation: Violation) -> String {
         switch violation {
             case .noFlightReview:
-                return t("Flight review not accomplished within prior 24 calendar months", comment: "violation")
+                return NSLocalizedString("Flight review not accomplished within prior 24 calendar months", bundle: Bundle.module, comment: "violation")
             case .noPassengerCurrency:
-                return t("Carried passengers without having completed required takeoffs and landings", comment: "violation")
+                return NSLocalizedString("Carried passengers without having completed required takeoffs and landings", bundle: Bundle.module, comment: "violation")
             case .noNightPassengerCurrency:
-                return t("Carried passengers at night without having completed required takeoffs and landings", comment: "violation")
+                return NSLocalizedString("Carried passengers at night without having completed required takeoffs and landings", bundle: Bundle.module, comment: "violation")
             case .noIFRCurrency:
-                return t("Flew under IFR without having completed required approaches/holds or IPC", comment: "violation")
+                return NSLocalizedString("Flew under IFR without having completed required approaches/holds or IPC", bundle: Bundle.module, comment: "violation")
             case .noPPC:
-                return t("Flew a type-rated aircraft without having completed a FAR 61.58 check", comment: "violation")
+                return NSLocalizedString("Flew a type-rated aircraft without having completed a FAR 61.58 check", bundle: Bundle.module, comment: "violation")
             case .noPPCInType:
-                return t("Flew a type-rated aircraft without having completed a FAR 61.58 check in type", comment: "violation")
+                return NSLocalizedString("Flew a type-rated aircraft without having completed a FAR 61.58 check in type", bundle: Bundle.module, comment: "violation")
         }
-    }
-    
-    private func t(_ key: String, comment: String) -> String {
-        return NSLocalizedString(key, bundle: Bundle.module, comment: comment)
     }
 }

@@ -87,7 +87,7 @@ public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
     
     func category() throws -> Category {
         guard let category = Category(rawValue: aircraftType.category) else {
-            throw Errors.unknownAircraftCategory(aircraftType.category)
+            throw Errors.unknownAircraftCategory(aircraftType.category, type: aircraftType.type)
         }
         return category
     }
@@ -95,7 +95,7 @@ public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
     func `class`() throws -> Class? {
         guard let classID = aircraftType.class else { return nil }
         guard let `class` = Class(rawValue: classID) else {
-            throw Errors.unknownAircraftClass(classID)
+            throw Errors.unknownAircraftClass(classID, type: aircraftType.type)
         }
         return `class`
     }
@@ -103,7 +103,7 @@ public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
     private func engineTypeEnum() throws -> EngineType? {
         guard let typeString = engineType?.defaultTitle else { return nil }
         guard let engineType = EngineType(rawValue: typeString) else {
-            throw Errors.unknownEngineType(typeString)
+            throw Errors.unknownEngineType(typeString, type: aircraftType.type)
         }
         return engineType
     }
@@ -111,7 +111,7 @@ public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
     func simType() throws -> SimulatorType? {
         guard let simTypeID = aircraftType.simType else { return nil }
         guard let simType = SimulatorType(rawValue: simTypeID) else {
-            throw Errors.unknownSimType(simTypeID)
+            throw Errors.unknownSimType(simTypeID, type: aircraftType.type)
         }
         return simType
     }
@@ -121,7 +121,7 @@ public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
         switch simCatClass {
             case "ASEL", "ASES", "AMEL", "AMES": return .airplane
             case "GLI": return .glider
-            default: throw Errors.unknownSimulatorCategoryClass(simCatClass)
+            default: throw Errors.unknownSimulatorCategoryClass(simCatClass, type: aircraftType.type)
         }
     }
     
@@ -133,7 +133,7 @@ public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
             case "AMEL": return .multiEngineLand
             case "AMES": return .multiEngineSea
             case "GLI": return nil
-            default: throw Errors.unknownSimulatorCategoryClass(simCatClass)
+            default: throw Errors.unknownSimulatorCategoryClass(simCatClass, type: aircraftType.type)
         }
     }
     
