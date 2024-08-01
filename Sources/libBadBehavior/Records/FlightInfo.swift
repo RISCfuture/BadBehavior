@@ -8,16 +8,16 @@ fileprivate let referenceDate: Date = {
 }()
 
 enum Category: Int, RawRepresentable {
-    case airplane = 175
-    case glider = 625
-    case simulator = 216
+    case airplane = 124
+    case glider = 554
+    case simulator = 540
 }
 
 enum Class: Int, RawRepresentable {
-    case singleEngineLand = 363
-    case singleEngineSea = 616
-    case multiEngineLand = 669
-    case multiEngineSea = 415
+    case singleEngineLand = 361
+    case singleEngineSea = 349
+    case multiEngineLand = 367
+    case multiEngineSea = 355
 }
 
 enum SimulatorType: String, RawRepresentable {
