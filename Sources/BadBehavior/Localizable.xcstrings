@@ -1,0 +1,47 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "- %@" : {
+      "comment" : "violation list item"
+    },
+    "????" : {
+      "comment" : "missing airport ID"
+    },
+    "%@ %@ %@ → %@" : {
+      "comment" : "flight info string [date, registration, origin, destination]",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@ %3$@ → %4$@"
+          }
+        }
+      }
+    },
+    "%lld violation(s) total." : {
+
+    },
+    "Carried passengers at night without having completed required takeoffs and landings" : {
+      "comment" : "violation"
+    },
+    "Carried passengers without having completed required takeoffs and landings" : {
+      "comment" : "violation"
+    },
+    "Flew a type-rated aircraft without having completed a FAR 61.58 check" : {
+      "comment" : "violation"
+    },
+    "Flew a type-rated aircraft without having completed a FAR 61.58 check in type" : {
+      "comment" : "violation"
+    },
+    "Flew under IFR without having completed required approaches/holds or IPC" : {
+      "comment" : "violation"
+    },
+    "Flight review not accomplished within prior 24 calendar months" : {
+      "comment" : "violation"
+    },
+    "Processing…" : {
+
+    }
+  },
+  "version" : "1.0"
+}

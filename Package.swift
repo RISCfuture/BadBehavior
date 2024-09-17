@@ -14,15 +14,12 @@ let package = Package(
         .target(name: "libBadBehavior",
                 dependencies: [
                     .product(name: "GRDB", package: "GRDB.swift")
-                ],
-                resources: [.process("Resources")]),
+                ]),
         .executableTarget(name: "BadBehavior",
                           dependencies: [
                             "libBadBehavior",
                             .product(name: "ArgumentParser", package: "swift-argument-parser")
-                          ],
-                          resources: [.process("Resources")])
-
+                          ])
     ]
 )
 

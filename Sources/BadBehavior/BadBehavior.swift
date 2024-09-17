@@ -17,8 +17,8 @@ struct BadBehavior: AsyncParsableCommand {
     // MARK: Main
     
     mutating func run() async throws {
-        puts("Processing…")
-        
+        print(String(localized: "Processing…"))
+
         let connection = try Connection(logbookPath: databasePath)
         
         let flights = connection.eachFlight()
@@ -26,8 +26,8 @@ struct BadBehavior: AsyncParsableCommand {
         try await validator.precalculateIFRCurrency()
         
         let violationsList = try await validator.violations().sorted(by: { $0.flight.date < $1.flight.date })
-        puts("\(violationsList.count) violation(s) total.")
-        puts("")
+        print(String(localized: "\(violationsList.count) violation(s) total."))
+        print("")
 
         for violations in violationsList {
             print(string(from: violations.flight))
@@ -52,10 +52,10 @@ struct BadBehavior: AsyncParsableCommand {
         return formatter
     }
     
-    private var missingAirportID: String { NSLocalizedString("????", bundle: Bundle.module, comment: "missing airport ID") }
-    private var flightFormat: String { NSLocalizedString("%@ %@ %@ → %@", bundle: Bundle.module, comment: "flight info string [date, registration, origin, destination]") }
-    private var violationFormat: String { NSLocalizedString("- %@", bundle: Bundle.module, comment: "violation list item") }
-    
+    private var missingAirportID: String { .init(localized: "????", comment: "missing airport ID") }
+    private var flightFormat: String { .init(localized: "%@ %@ %@ → %@", comment: "flight info string [date, registration, origin, destination]") }
+    private var violationFormat: String { .init(localized: "- %@", comment: "violation list item") }
+
     private func string(from flight: FlightInfo) -> String {
         String(format: flightFormat,
                datePrinter.string(from: flight.date),
@@ -67,17 +67,17 @@ struct BadBehavior: AsyncParsableCommand {
     private func string(from violation: Violation) -> String {
         switch violation {
             case .noFlightReview:
-                return NSLocalizedString("Flight review not accomplished within prior 24 calendar months", bundle: Bundle.module, comment: "violation")
+                return String(localized: "Flight review not accomplished within prior 24 calendar months", comment: "violation")
             case .noPassengerCurrency:
-                return NSLocalizedString("Carried passengers without having completed required takeoffs and landings", bundle: Bundle.module, comment: "violation")
+                return String(localized: "Carried passengers without having completed required takeoffs and landings", comment: "violation")
             case .noNightPassengerCurrency:
-                return NSLocalizedString("Carried passengers at night without having completed required takeoffs and landings", bundle: Bundle.module, comment: "violation")
+                return String(localized: "Carried passengers at night without having completed required takeoffs and landings", comment: "violation")
             case .noIFRCurrency:
-                return NSLocalizedString("Flew under IFR without having completed required approaches/holds or IPC", bundle: Bundle.module, comment: "violation")
+                return String(localized: "Flew under IFR without having completed required approaches/holds or IPC", comment: "violation")
             case .noPPC:
-                return NSLocalizedString("Flew a type-rated aircraft without having completed a FAR 61.58 check", bundle: Bundle.module, comment: "violation")
+                return String(localized: "Flew a type-rated aircraft without having completed a FAR 61.58 check", comment: "violation")
             case .noPPCInType:
-                return NSLocalizedString("Flew a type-rated aircraft without having completed a FAR 61.58 check in type", bundle: Bundle.module, comment: "violation")
+                return String(localized: "Flew a type-rated aircraft without having completed a FAR 61.58 check in type", comment: "violation")
         }
     }
 }

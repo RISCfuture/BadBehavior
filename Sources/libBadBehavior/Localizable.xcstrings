@@ -1,0 +1,85 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Can’t determine location of LogTen logbook." : {
+      "comment" : "error"
+    },
+    "Can’t find LogTen logbook at ‘%@’." : {
+      "comment" : "error"
+    },
+    "Install and run LogTen before using this tool." : {
+      "comment" : "recovery suggestion"
+    },
+    "LogTen may not be installed, or may not have been run yet." : {
+      "comment" : "failure reason"
+    },
+    "The current user may not have a home folder, or a Library subfolder." : {
+      "comment" : "failure reason"
+    },
+    "Try using the tool with a normal macOS user." : {
+      "comment" : "recovery suggestion"
+    },
+    "Unknown aircraft category ID %d for type %@." : {
+      "comment" : "error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unknown aircraft category ID %1$d for type %2$@."
+          }
+        }
+      }
+    },
+    "Unknown aircraft class ID %d for type %@." : {
+      "comment" : "error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unknown aircraft class ID %1$d for type %2$@."
+          }
+        }
+      }
+    },
+    "Unknown engine type ID ‘%@’ for type %@." : {
+      "comment" : "error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unknown engine type ID ‘%1$@’ for type %2$@."
+          }
+        }
+      }
+    },
+    "Unknown simulator category and class ‘%@’ for type %@." : {
+      "comment" : "error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unknown simulator category and class ‘%1$@’ for type %2$@."
+          }
+        }
+      }
+    },
+    "Unknown simulator type ‘%@’ for type %@." : {
+      "comment" : "error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unknown simulator type ‘%1$@’ for type %2$@."
+          }
+        }
+      }
+    },
+    "You can modify the BadBeheavior source code to include these record IDs." : {
+      "comment" : "recovery suggestion"
+    },
+    "Your LogTen logbook includes record IDs that were not considered when the BadBehavior code was written." : {
+      "comment" : "failure reason"
+    }
+  },
+  "version" : "1.0"
+}
