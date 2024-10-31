@@ -1,7 +1,7 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
-struct FlightPassengers {
+struct FlightPassengers: Sendable {
     // MARK: Properties
     
     var flightID: Int

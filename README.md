@@ -20,9 +20,9 @@ currency.
 
 ## Installation and Execution
 
-This script is a Swift Package Manager 4.0 package. Simply run `swift run` from
+This script is a Swift Package Manager 6.0 package. Simply run `swift run` from
 the command line within the package directory to build and run the script. You
-will need at least Swift 4.
+will need at least Swift 6.
 
 ## Requirements
 

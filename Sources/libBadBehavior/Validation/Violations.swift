@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Violation: Codable {
+public enum Violation: Codable, Sendable {
     case noFlightReview
     case noPassengerCurrency
     case noNightPassengerCurrency
@@ -9,7 +9,7 @@ public enum Violation: Codable {
     case noPPCInType
 }
 
-public struct Violations: Codable {
+public struct Violations: Codable, Sendable {
     public let flight: FlightInfo
     public let violations: Array<Violation>
 }

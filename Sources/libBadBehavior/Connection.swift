@@ -1,7 +1,7 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
-public class Connection {
+public actor Connection {
     
     // MARK: Initializers
     

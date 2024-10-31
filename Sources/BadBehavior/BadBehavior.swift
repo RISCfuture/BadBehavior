@@ -21,7 +21,7 @@ struct BadBehavior: AsyncParsableCommand {
 
         let connection = try Connection(logbookPath: databasePath)
         
-        let flights = connection.eachFlight()
+        let flights = await connection.eachFlight()
         let validator = try await Validator(flights: flights.collect())
         try await validator.precalculateIFRCurrency()
         

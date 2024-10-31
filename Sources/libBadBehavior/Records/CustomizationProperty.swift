@@ -1,7 +1,7 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
-struct CustomizationProperty: Identifiable {
+struct CustomizationProperty: Identifiable, Sendable {
     var id: Int
     var defaultTitle: String
 }

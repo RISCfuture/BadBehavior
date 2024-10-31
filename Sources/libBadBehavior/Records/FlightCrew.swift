@@ -1,7 +1,7 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
-struct FlightCrew {
+struct FlightCrew: Sendable {
     var flightID: Int
     var PIC: Int?
     var safetyPilot: Int?

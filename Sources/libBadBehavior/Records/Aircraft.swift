@@ -1,7 +1,7 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
-struct Aircraft: Identifiable {
+struct Aircraft: Identifiable, Sendable {
     var id: Int
     var aircraftTypeID: String
     var registration: String

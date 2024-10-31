@@ -1,7 +1,7 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
-struct Place {
+struct Place: Sendable {
     var id: Int
     var LID: String
 }

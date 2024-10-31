@@ -1,5 +1,5 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
 fileprivate let zulu = TimeZone(secondsFromGMT: 0)
 fileprivate let referenceDate: Date = {
@@ -7,27 +7,27 @@ fileprivate let referenceDate: Date = {
     return Calendar.current.date(from: components)!
 }()
 
-enum Category: Int, RawRepresentable {
+enum Category: Int, RawRepresentable, Sendable {
     case airplane = 124
     case glider = 554
     case simulator = 540
 }
 
-enum Class: Int, RawRepresentable {
+enum Class: Int, RawRepresentable, Sendable {
     case singleEngineLand = 361
     case singleEngineSea = 349
     case multiEngineLand = 367
     case multiEngineSea = 355
 }
 
-enum SimulatorType: String, RawRepresentable {
+enum SimulatorType: String, RawRepresentable, Sendable {
     case BATD = "BATD"
     case AATD = "AATD"
     case FTD = "FTD"
     case FFS = "FFS"
 }
 
-enum EngineType: String, RawRepresentable {
+enum EngineType: String, RawRepresentable, Sendable {
     case twoCycle = "2 Cycle"
     case fourCycle = "4 Cycle"
     case jet = "Jet"
@@ -41,7 +41,7 @@ enum EngineType: String, RawRepresentable {
     case unknown = "Unknown"
 }
 
-public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable {
+public struct FlightInfo: Codable, FetchableRecord, Identifiable, Equatable, Sendable {
     
     // MARK: Associations
     
