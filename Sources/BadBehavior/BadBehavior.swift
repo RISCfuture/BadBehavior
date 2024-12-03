@@ -8,6 +8,27 @@ import libBadBehavior
 @main
 struct BadBehavior: AsyncParsableCommand {
     
+    static let configuration = CommandConfiguration(
+        abstract: "scans your LogTen for Mac logbook, looking for any flights that may have been contrary to FAR part 91 regulations.",
+        discussion: """
+            In particular, it attempts to locate the following flights:
+            
+            * Flights made outside of the 24-month window following a BFR.
+            * Flights with passengers made without the required takeoffs and landings within
+            the previous 90 days (including special tailwheel requirements).
+            * Night flights with passengers made without the required night takeoffs and
+            landings within the previous 90 days (including special tailwheel
+            requirements).
+            * IFR flights made with fewer than six approaches and one hold in the preceding
+            six months (and no IPC accomplished).
+            * Flights in type-rated aircraft without the required FAR 61.58 check having
+            been completed.
+            
+            It prints to the terminal a list of such flights and the reasons they are out of
+            currency.
+            """
+    )
+    
     // MARK: Arguments
     
     @Argument(help: "The location of the LogTenCoreDataStore.sql file",
