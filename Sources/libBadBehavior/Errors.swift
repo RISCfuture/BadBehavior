@@ -1,60 +1,56 @@
 import Foundation
 
-enum Errors: Error {
-    case noLibraryDirectory
-    case noLogbookFile(path: String)
-    case unknownAircraftCategory(_ category: Int, type: String)
-    case unknownAircraftClass(_ `class`: Int, type: String)
-    case unknownSimType(_ simType: String, type: String)
-    case unknownEngineType(_ engineType: String, type: String)
-    case unknownSimulatorCategoryClass(_ categoryClass: String, type: String)
+package enum Errors: Swift.Error {
+    case couldntCreateStore(path: URL)
+    case missingProperty(_ property: String, model: String)
+    case invalidClass(_ `class`: AircraftType.Class, forCategory: AircraftType.Category)
+    case missingClass(type: String)
+    case missingSimulatorType(type: String)
 }
 
 extension Errors: LocalizedError {
-    var errorDescription: String? {
+    package var errorDescription: String? {
         switch self {
-            case .noLibraryDirectory:
-                return String(localized: "Can’t determine location of LogTen logbook.", comment: "error")
-            case let .noLogbookFile(path):
-                let template = String(localized: "Can’t find LogTen logbook at ‘%@’.", comment: "error")
-                return String(format: template, path)
-            case let .unknownAircraftCategory(category, type):
-                let template = String(localized: "Unknown aircraft category ID %d for type %@.", comment: "error")
-                return String(format: template, category, type)
-            case let .unknownAircraftClass(`class`, type):
-                let template = String(localized: "Unknown aircraft class ID %d for type %@.", comment: "error")
-                return String(format: template, `class`, type)
-            case let .unknownSimType(simType, type):
-                let template = String(localized: "Unknown simulator type ‘%@’ for type %@.", comment: "error")
-                return String(format: template, simType, type)
-            case let .unknownEngineType(engineType, type):
-                let template = String(localized: "Unknown engine type ID ‘%@’ for type %@.", comment: "error")
-                return String(format: template, engineType, type)
-            case let .unknownSimulatorCategoryClass(simCatClass, type):
-                let template = String(localized: "Unknown simulator category and class ‘%@’ for type %@.", comment: "error")
-                return String(format: template, simCatClass, type)
+            case let .couldntCreateStore(path):
+                return "Couldn’t create Core Data store for “\(path.lastPathComponent)”"
+            case .missingProperty:
+                return "A required property is missing"
+            case .invalidClass:
+                return "Aircraft category/class pair is invalid"
+            case let .missingClass(type):
+                return "Missing aircraft class for aircraft type “\(type)”"
+            case let .missingSimulatorType(type):
+                return "Missing Sim Type for aircraft type “\(type)”"
         }
     }
     
-    var failureReason: String? {
+    package var failureReason: String? {
         switch self {
-            case .noLibraryDirectory:
-                return String(localized: "The current user may not have a home folder, or a Library subfolder.", comment: "failure reason")
-            case .noLogbookFile(_):
-                return String(localized: "LogTen may not be installed, or may not have been run yet.", comment: "failure reason")
-            case .unknownAircraftCategory(_, _), .unknownAircraftClass(_, _), .unknownSimType(_, _), .unknownEngineType(_, _), .unknownSimulatorCategoryClass(_, _):
-                return String(localized: "Your LogTen logbook includes record IDs that were not considered when the BadBehavior code was written.", comment: "failure reason")
+            case .couldntCreateStore:
+                return "The LogTen Pro data either doesn’t exist, is invalid, or is a newer version."
+            case let .missingProperty(property, model):
+                return "\(model) must have a property named “\(property)”."
+            case let .invalidClass(`class`, category):
+                return "“\(`class`)” is not a valid aircraft class for category “\(category)”."
+            case .missingClass:
+                return "Aircraft category requires a class."
+            case .missingSimulatorType:
+                return "Simulator requires a Sim Type entry."
         }
     }
     
-    var recoverySuggestion: String? {
+    package var recoverySuggestion: String? {
         switch self {
-            case .noLibraryDirectory:
-                return String(localized: "Try using the tool with a normal macOS user.", comment: "recovery suggestion")
-            case .noLogbookFile(_):
-                return String(localized: "Install and run LogTen before using this tool.", comment: "recovery suggestion")
-            case .unknownAircraftCategory(_, _), .unknownAircraftClass(_, _), .unknownSimType(_, _), .unknownEngineType(_, _), .unknownSimulatorCategoryClass(_, _):
-                return String(localized: "You can modify the BadBeheavior source code to include these record IDs.", comment: "recovery suggestion")
+            case .couldntCreateStore:
+                return "Install LogTen Pro if it is not installed, or check that its version is compatible with this tool."
+            case let .missingProperty(property, model):
+                return "Add a property called “\(property)” to \(model)."
+            case .invalidClass:
+                return "Modify the aircraft to correct its category and class."
+            case .missingClass:
+                return "Add the aircraft class to the Aircraft record."
+            case .missingSimulatorType:
+                return "Add the Sim Type entry to the Aircraft record for the simulator."
         }
     }
 }

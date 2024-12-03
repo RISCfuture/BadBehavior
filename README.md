@@ -24,17 +24,54 @@ This script is a Swift Package Manager 6.0 package. Simply run `swift run` from
 the command line within the package directory to build and run the script. You
 will need at least Swift 6.
 
-## Requirements
+## Assumptions and Idiosyncrasies
 
-This script is built to work with the logbook created by LogTen for macOS. You
-must have that application installed and your logbook must be saved in the
-normal location.
+This script has been tailored to my specific logbook. It will likely require at
+least a little modification before it works with your logbook, but it should
+take you 95% of the way there. In particular:
 
-Your logbook must also conform to the following (or the code should be
-modified):
+### LogTen Pro: Flights
 
-* You must be recording night full-stop landings for tailwheel currency as
-  custom landing field #5. (Currently this is not a default field in LogTen.)
+- LogTen Pro does not have a "night full-stop landings" field by default. You
+  will need a "Custom Landings" field named "Night Full Stops". (If you are not
+  recording night full-stop landings, then how are you tracking night currency?)
+- LogTen Pro does not have a "checkride" Boolean field. You will need a
+  "Custom Notes" field named "Checkride". Flights with any non-empty value in
+  this field will be considered checkrides.
+- LogTen Pro does not have a field for indicating FAR 61.58 recurrent flights.
+  You will need a "Custom Notes" field named "FAR 61.58". Flights with any
+  non-empty value in this field will be considered recurrent checkrides.
+- LogTen Pro does not have a field for indicating FAR 61.31(k) NVG proficiency
+  check flights. You will need a "Custom Notes" field named "FAR 61.31(k)".
+  Flights with any non-empty value in this field will be considered NVG
+  proficiency check flights.
+- LogTen Pro does not have a "safety pilot" or "examiner" role. You must have
+  "Custom Role" fields titled "Safety Pilot" and "Examiner".
+
+### LogTen Pro: Aircraft and aircraft types
+
+- This script will not work if you have modified or rearranged your engine
+  types, aircraft categories, or aircraft classes.
+- LogTen Pro only has "jet" and "turbofan" engine types. The "jet" type is
+  assumed to mean "turbojet".
+- The "aircraft type" field in my logbook does not conform to FAA aircraft
+  types. For example, I have "C-172SP" as a type instead of "C172". I use a
+  custom Aircraft Type field called "Type Code". If you also have such a field,
+  it will use the value from that field; otherwise, it will use the normal
+  aircraft type.
+- This script requires more simulator information than LogTen Pro is set up for
+  by default. To provide this info, you will need to modify Aircraft Type to
+  include:
+  - a custom field called "Sim Type" whose values can be "BATD", "AATD", "FTD",
+    or "FFS" (or blank for aircraft);
+  - a custom field called "Type Code" whose value is the type code for the
+    aircraft being simulated (FFS and FTD only); and
+  - a custom field called "Sim A/C Cat" whose value is the category and class
+    for the aircraft being simulated (FTD and FFS only, values can be "ASEL",
+    "ASES", "AMEL", "AMES", or "GL" for glider).
+
+### Logging
+
 * You must not have any value in the Solo hours field for any flights after you
   attained your first private/sport certificate. This script uses the presence
   of solo hours to determine if the flight was a student pilot solo flight.
@@ -42,55 +79,14 @@ modified):
   CFI.
 * You must not be logging instrument approaches that do not have at least some
   amount of IMC after the FAF. The FAA says you cannot log approaches for which
-  amount of IMC after the FAF. The FAA says you cannot log approaches for which
   the final segment is done entirely in VMC.
 * You must be filling out the Weight field for aircraft with a max gross
   weight greater than 12,500 pounds. You must be filling out the Engine Type
   field for turbofan aircraft. (See below for turbojet aircraft.)
-* If you train in a full flight simulator, you must configure the simulator with
-  type Simulator, and set your custom fields as follows:
-  * Custom field #1 should be the sim type ("FFS" if it's a full flight sim).
-  * Custom field #2 should be the sim aircraft type, if it simulates an aircraft
-    with a required type rating.
-  * Custom field #3 should be the sim aircraft category and class ("ASEL",
-    "AMEL", "ASES", and "AMES" are the supported values).
-* LogTen has no "safety pilot" field by default. Custom Crew field #1 must be
-  allocated to the safety pilot.
-* LogTen has no "FAR 61.58" field by default. Custom Note #1 must be "Y" for
-  flights that qualify as FAR 61.58 checkrides.
-
-## Limitations
-
-This script has basically been written to work with my logbook, and thus has
-many idiosyncracies. You will likely need to modify or extend the script to get
-it to work with your logbook.
-
-### Modifications to be made to the script
-
-The script may need to be modified to suit your needs in the following ways:
-
-* I use field "Custom Landing 5" to record my night full-stop landings. You will
-  have to modify the `LogTenProXDatabase#eachFlight` method and change it to
-  your custom field.
-* I use the first three custom fields on aircraft type to record simulator
-  information. See above for details.
-* LogTen has no "safety pilot" field by default. Custom Crew field #1 must be
-  allocated to the safety pilot.
-* The script contains a mapping of LogTen category/class IDs to aircraft
-  categories and classes. (For example, the Airplane category is ID 502.)
-  I only fly airplanes and gliders. If you fly other categories of aircraft,
-  you will need to modify the `categories` and `classes` statics on the
-  `BadBehavior` class.
-
-### Modifications to be made to your logbook
-
-You may need to adjust the values in your logbook in the following ways (or
-modify the code):
-
 * Your instrument checkride must be labeled as an IPC in order to prevent it
   from being flagged as illegal.
 
-### Limitations of the script
+## Limitations
 
 The script is not perfect, and will generate both false positives and false
 negatives:
@@ -126,8 +122,9 @@ If you have been flying practice approaches to maintain currency, there must not
 be more than a 12-month gap between such flights. If you go more than 12
 calendar months without having flown practice approaches, then the only way to
 regain your instrument currency is via an IPC. If you missed that window even by
-a day, then all your subsequent IFR flights were illegal. Get an instructor and
-complete an IPC and you'll be set for the future.
+a day, then all your subsequent IFR flights were illegal, even if you did 6
+approaches and a hold. Get an instructor and complete an IPC and you'll be set
+for the future.
 
 ### It says all my night flights were out of currency!
 
