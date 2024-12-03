@@ -60,7 +60,6 @@ struct BadBehavior: AsyncParsableCommand {
         
         let flights = try await reader.read()
         let validator = Validator(flights: flights)
-        try await validator.precalculateIFRCurrency()
         
         let violationsList = try await validator.violations().sorted(by: { $0.flight.date < $1.flight.date })
         print("\(violationsList.count) violation(s) total.")
