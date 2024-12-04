@@ -113,6 +113,14 @@ negatives:
   example, if you do your three takeoffs and landings solo, then go pick up
   passengers for the next leg, logging both legs as a single flight, it will
   mark that flight as non-compliant.
+* Instrument currency as defined in 61.57(c) requires six approaches, a hold,
+  and "intercepting and tracking courses". There is no way to log that last
+  part, but since it can be reasonably assumed that any instrument flight 
+  involving approaches or holds by definition involves intercepting and tracking
+  courses, it's simply assumed to always be true.
+* The NVG currency checks only validate whether NVG takeoffs and landings are
+  legal. They do not check NVG hover operations or other NVG operations that
+  LogTen Pro is not set up to record.
 
 ## Help Me!
 

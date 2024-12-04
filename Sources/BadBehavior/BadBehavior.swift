@@ -111,6 +111,14 @@ struct BadBehavior: AsyncParsableCommand {
                 return "Flew a type-rated aircraft without having completed a FAR 61.58 check"
             case .noPPCInType:
                 return "Flew a type-rated aircraft without having completed a FAR 61.58 check in type"
+            case .noNVGCurrency:
+                return "Made a takeoff or landing under NVGs without having the required NVG takeoffs and landings or proificiency checks"
+            case .noNVGPassengerCurrency:
+                return "Made a takeoff or landing under NVGs with passengers without having the required NVG takeoffs and landings or proificiency checks"
+            case .dualGiven8in24:
+                return "Exceeded maximum 8 hours of dual given in a 24-hour period"
+            case .dualGivenTimeInType:
+                return "Gave training in a multi-engine, helicopter, or powered-lift aircraft without having 5 hours in type"
         }
     }
 }

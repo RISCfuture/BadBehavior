@@ -4,6 +4,7 @@ import CoreData
 fileprivate let nightFullStopField = "Night Full Stops"
 fileprivate let proficiencyField = "FAR 61.58"
 fileprivate let checkrideField = "Checkride"
+fileprivate let NVGProficiencyCheckField = "FAR 61.31(k)"
 
 fileprivate let safetyPilotField = "Safety Pilot"
 fileprivate let examinerField = "Examiner"
@@ -16,6 +17,7 @@ extension Reader {
         let nightFullStopProperty = try flightCustomLanding(for: nightFullStopField, context: context)
         let proficiencyProperty = try flightCustomNote(for: proficiencyField, context: context)
         let checkrideProperty = try flightCustomNote(for: checkrideField, context: context)
+        let NVGProficiencyCheckProperty = try flightCustomNote(for: NVGProficiencyCheckField, context: context)
         let safetyPilotProperty = try flightCrewCustomPerson(for: safetyPilotField, context: context)
         let examinerProperty = try flightCrewCustomPerson(for: examinerField, context: context)
         
@@ -28,6 +30,7 @@ extension Reader {
                          nightFullStopProperty: nightFullStopProperty,
                          proficiencyProperty: proficiencyProperty,
                          checkrideProperty: checkrideProperty,
+                         NVGProficiencyCheckProperty: NVGProficiencyCheckProperty,
                          safetyPilotProperty: safetyPilotProperty,
                          examinerProperty: examinerProperty)
         }

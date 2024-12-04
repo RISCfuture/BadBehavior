@@ -41,6 +41,7 @@ package struct Flight: IdentifiableRecord {
     package let isCheckride: Bool
     package let isIPC: Bool
     package let isRecurrent: Bool
+    package let isNVGProficiencyCheck: Bool
     
     // MARK: Computed Properties
     
@@ -61,6 +62,14 @@ package struct Flight: IdentifiableRecord {
     package var totalLandings: UInt { dayLandings + nightLandings }
     package var isTailwheel: Bool { aircraft?.tailwheel == true }
     
+    package var PICHours: Double { Double(PICTime)/60.0 }
+    package var nightHours: Double { Double(nightTime)/60.0 }
+    package var actualInstrumentHours: Double { Double(actualInstrumentTime)/60.0 }
+    package var dualGivenHours: Double { Double(dualGivenTime)/60.0 }
+    package var dualReceivedHours: Double { Double(dualReceivedTime)/60.0 }
+    package var soloHours: Double { Double(soloTime)/60.0 }
+    package var NVGHours: Double { Double(NVGTime)/60.0 }
+    
     // MARK: Initializers
     
     init(flight: CNFlight,
@@ -68,6 +77,7 @@ package struct Flight: IdentifiableRecord {
          nightFullStopProperty: KeyPath<CNFlight, NSNumber?>,
          proficiencyProperty: KeyPath<CNFlight, String?>,
          checkrideProperty: KeyPath<CNFlight, String?>,
+         NVGProficiencyCheckProperty: KeyPath<CNFlight, String?>,
          safetyPilotProperty: KeyPath<CNFlightCrew, CNPerson?>,
          examinerProperty: KeyPath<CNFlightCrew, CNPerson?>
     ) {
@@ -109,6 +119,7 @@ package struct Flight: IdentifiableRecord {
         isIPC = flight.flight_instrumentProficiencyCheck?.boolValue ?? false
         isRecurrent = flight[keyPath: proficiencyProperty]?.isPresent ?? false
         isCheckride = flight[keyPath: checkrideProperty]?.isPresent ?? false
+        isNVGProficiencyCheck = flight[keyPath: NVGProficiencyCheckProperty]?.isPresent ?? false
         
         remarks = flight.flight_remarks
     }

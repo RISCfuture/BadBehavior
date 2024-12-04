@@ -9,7 +9,7 @@ final class NoPassengerCurrency: ViolationChecker {
         if flight.isDualReceived || !flight.isPIC { return nil }
         if !flight.hasPassengers { return nil }
         
-        let eligibleFlights = try await flightsWithinLast(days: 90, ofFlight: flight, matchingCategory: true, matchingClass: true, matchingTypeIfRequired: true),
+        let eligibleFlights = try await flightsWithinLast(calendarDays: 90, ofFlight: flight, matchingCategory: true, matchingClass: true, matchingTypeIfRequired: true),
             totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.totalTakeoffs },
             totalLandings = eligibleFlights.reduce(0) { $0 + $1.totalLandings }
         if totalTakeoffs < 3 || totalLandings < 3 { return .noPassengerCurrency }

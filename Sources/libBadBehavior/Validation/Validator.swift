@@ -10,7 +10,11 @@ package actor Validator {
         NoNightPassengerCurrency.self,
         NoIFRCurrency.self,
         NoProficiencyCheck.self,
-        NoProficiencyCheckInType.self
+        NoProficiencyCheckInType.self,
+        NoNVGCurrency.self,
+        NoNVGPassengerCurrency.self,
+        DualGiven8In24.self,
+        DualGivenTimeInType.self
     ]
     
     // MARK: Init

@@ -10,7 +10,23 @@ protocol ViolationChecker: Sendable {
 extension ViolationChecker {
     func setup() async throws {}
     
-    func flightsWithinLast(days: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) async throws -> Array<Flight> {
+    func flightsWithinLast(hours: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) async throws -> Array<Flight> {
+        guard let aircraft = flight.aircraft else { return [] }
+        
+        let referenceDate = Calendar.current.date(byAdding: .hour, value: -hours, to: flight.date)!
+        
+        return try flights.filter { f in
+            let differentFlight = f != flight,
+                withinDateRange = (referenceDate...flight.date).contains(f.date),
+                matchesCategory = try (!matchingCategory || self.matchesCategory(current: flight, past: f)),
+                matchesClass = try (!matchingClass || self.matchesClass(current: flight, past: f)),
+                matchesType = try (!matchingTypeIfRequired || !aircraft.typeRatingRequired || self.matchesType(current: flight, past: f))
+            
+            return differentFlight && withinDateRange && matchesCategory && matchesClass && matchesType
+        }
+    }
+    
+    func flightsWithinLast(calendarDays days: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) async throws -> Array<Flight> {
         guard let aircraft = flight.aircraft else { return [] }
         
         var referenceDate = Calendar.current.date(byAdding: .day, value: -days, to: flight.date)!
@@ -27,10 +43,10 @@ extension ViolationChecker {
         }
     }
     
-    func flightsWithinLast(calendarMonths: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) async throws -> Array<Flight> {
+    func flightsWithinLast(calendarMonths months: Int, ofFlight flight: Flight, matchingCategory: Bool = false, matchingClass: Bool = false, matchingTypeIfRequired: Bool = false) async throws -> Array<Flight> {
         guard let aircraft = flight.aircraft else { return [] }
         
-        var referenceDate = Calendar.current.date(byAdding: .month, value: -calendarMonths, to: flight.date)!,
+        var referenceDate = Calendar.current.date(byAdding: .month, value: -months, to: flight.date)!,
             components = Calendar.current.dateComponents([.year, .month, .day], from: referenceDate)
         components.day = 1
         referenceDate = Calendar.current.date(from: components)!

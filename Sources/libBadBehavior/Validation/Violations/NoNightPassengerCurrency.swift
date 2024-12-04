@@ -10,7 +10,7 @@ final class NoNightPassengerCurrency: ViolationChecker {
         if !flight.hasPassengers { return nil }
         if !flight.isNight { return nil }
         
-        let eligibleFlights = try await flightsWithinLast(days: 90, ofFlight: flight, matchingCategory: true, matchingClass: true, matchingTypeIfRequired: true)
+        let eligibleFlights = try await flightsWithinLast(calendarDays: 90, ofFlight: flight, matchingCategory: true, matchingClass: true, matchingTypeIfRequired: true)
         let totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.nightTakeoffs }
         let totalLandings = eligibleFlights.reduce(0) { $0 + $1.nightFullStopLandings }
         if totalTakeoffs < 3 || totalLandings < 3 { return .noNightPassengerCurrency }
