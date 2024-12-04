@@ -1,0 +1,132 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "“%@” is not a valid aircraft class for category “%@”." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "“%1$@” is not a valid aircraft class for category “%2$@”."
+          }
+        }
+      }
+    },
+    "%@ must have a property named “%@”." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ must have a property named “%2$@”."
+          }
+        }
+      }
+    },
+    "A required property is missing" : {
+
+    },
+    "Add a property called “%@” to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Add a property called “%1$@” to %2$@."
+          }
+        }
+      }
+    },
+    "Add the aircraft class to the Aircraft record." : {
+
+    },
+    "Add the Sim Type entry to the Aircraft record for the simulator." : {
+
+    },
+    "Aircraft category requires a class." : {
+
+    },
+    "Aircraft category/class pair is invalid" : {
+
+    },
+    "Airplane" : {
+
+    },
+    "Airship" : {
+
+    },
+    "Couldn’t create Core Data store for “%@”" : {
+
+    },
+    "Free Balloon" : {
+
+    },
+    "Glider" : {
+
+    },
+    "Gyroplane" : {
+
+    },
+    "Helicopter" : {
+
+    },
+    "Install LogTen Pro if it is not installed, or check that its version is compatible with this tool." : {
+
+    },
+    "Lighter-Than-Air" : {
+
+    },
+    "Missing aircraft class for aircraft type “%@”" : {
+
+    },
+    "Missing Sim Type for aircraft type “%@”" : {
+
+    },
+    "Modify the aircraft to correct its category and class." : {
+
+    },
+    "Multi-Engine Land" : {
+
+    },
+    "Multi-Engine Sea" : {
+
+    },
+    "Other" : {
+
+    },
+    "PC-ATD" : {
+
+    },
+    "Powered Lift" : {
+
+    },
+    "Powered Parachute" : {
+
+    },
+    "Rotorcraft" : {
+
+    },
+    "Simulator" : {
+
+    },
+    "Simulator requires a Sim Type entry." : {
+
+    },
+    "Single-Engine Land" : {
+
+    },
+    "Single-Engine Sea" : {
+
+    },
+    "The LogTen Pro data either doesn’t exist, is invalid, or is a newer version." : {
+
+    },
+    "Training Device" : {
+
+    },
+    "UAV" : {
+
+    },
+    "Weight-Shift-Control" : {
+
+    }
+  },
+  "version" : "1.0"
+}

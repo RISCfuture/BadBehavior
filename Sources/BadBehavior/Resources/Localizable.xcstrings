@@ -1,0 +1,78 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "- %@" : {
+
+    },
+    "????" : {
+
+    },
+    "%@ %@ %@ → %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ %3$@ → %4$@"
+          }
+        }
+      }
+    },
+    "%ld violations total." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%ld violation total."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%ld violations total."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Carried passengers at night without having completed required takeoffs and landings [61.57(b)]" : {
+
+    },
+    "Carried passengers without having completed required takeoffs and landings [61.57(a)]" : {
+
+    },
+    "Exceeded maximum 8 hours of dual given in a 24-hour period [61.195(a)]" : {
+
+    },
+    "Flew a type-rated aircraft without having completed a FAR 61.58 check [61.58(a)(1)]" : {
+
+    },
+    "Flew a type-rated aircraft without having completed a FAR 61.58 check in type [61.58(a)(2)]" : {
+
+    },
+    "Flew under IFR without having completed required approaches/holds or IPC [61.57(c)]" : {
+
+    },
+    "Flight review not accomplished within prior 24 calendar months [61.56(c)]" : {
+
+    },
+    "Gave training in a multi-engine, helicopter, or powered-lift aircraft without having 5 hours in type [61.195(f)]" : {
+
+    },
+    "Made a takeoff or landing under NVGs with passengers without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]" : {
+
+    },
+    "Made a takeoff or landing under NVGs without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]" : {
+
+    },
+    "Processing…" : {
+
+    }
+  },
+  "version" : "1.0"
+}

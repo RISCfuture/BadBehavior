@@ -9,7 +9,7 @@ import libBadBehavior
 struct BadBehavior: AsyncParsableCommand {
     
     static let configuration = CommandConfiguration(
-        abstract: "scans your LogTen for Mac logbook, looking for any flights that may have been contrary to FAR part 91 regulations.",
+        abstract: "Scans your LogTen for Mac logbook, looking for any flights that may have been contrary to FAR part 91 regulations.",
         discussion: """
             In particular, it attempts to locate the following flights:
             
@@ -54,24 +54,24 @@ struct BadBehavior: AsyncParsableCommand {
     // MARK: Main
     
     mutating func run() async throws {
-        print("Processing…")
-
+        print(String(localized: "Processing…"))
+        
         let reader = try await Reader(storeURL: logtenFile, modelURL: logtenManagedObjectModel)
         
         let flights = try await reader.read()
         let validator = Validator(flights: flights)
         
         let violationsList = try await validator.violations().sorted(by: { $0.flight.date < $1.flight.date })
-        print("\(violationsList.count) violation(s) total.")
+        print(String(localized: "\(violationsList.count) violations total."))
         print("")
-
+        
         for violations in violationsList {
             print(string(from: violations.flight))
             if let remarks = violations.flight.remarks { print(remarks) }
             print("")
-
+            
             for violation in violations.violations {
-                print("- \(string(from: violation))")
+                print(String(localized: "- \(string(from: violation))"))
             }
             
             print("")
@@ -90,35 +90,35 @@ struct BadBehavior: AsyncParsableCommand {
     
     private func string(from flight: Flight) -> String {
         let date = datePrinter.string(from: flight.date),
-        registration = flight.aircraft?.registration ?? "????",
-        origin = flight.from?.identifier ?? "????",
-        destination = flight.to?.identifier ?? "????"
+            registration = flight.aircraft?.registration ?? String(localized: "????"),
+            origin = flight.from?.identifier ?? String(localized: "????"),
+            destination = flight.to?.identifier ?? String(localized: "????")
         
-        return "\(date) \(registration) \(origin) → \(destination)"
+        return String(localized: "\(date) \(registration) \(origin) → \(destination)")
     }
     
     private func string(from violation: Violation) -> String {
         switch violation {
             case .noFlightReview:
-                return "Flight review not accomplished within prior 24 calendar months [61.56(c)]"
+                return String(localized: "Flight review not accomplished within prior 24 calendar months [61.56(c)]")
             case .noPassengerCurrency:
-                return "Carried passengers without having completed required takeoffs and landings [61.57(a)]"
+                return String(localized: "Carried passengers without having completed required takeoffs and landings [61.57(a)]")
             case .noNightPassengerCurrency:
-                return "Carried passengers at night without having completed required takeoffs and landings [61.57(b)]"
+                return String(localized: "Carried passengers at night without having completed required takeoffs and landings [61.57(b)]")
             case .noIFRCurrency:
-                return "Flew under IFR without having completed required approaches/holds or IPC [61.57(c)]"
+                return String(localized: "Flew under IFR without having completed required approaches/holds or IPC [61.57(c)]")
             case .noPPC:
-                return "Flew a type-rated aircraft without having completed a FAR 61.58 check [61.58(a)(1)]"
+                return String(localized: "Flew a type-rated aircraft without having completed a FAR 61.58 check [61.58(a)(1)]")
             case .noPPCInType:
-                return "Flew a type-rated aircraft without having completed a FAR 61.58 check in type [61.58(a)(2)]"
+                return String(localized: "Flew a type-rated aircraft without having completed a FAR 61.58 check in type [61.58(a)(2)]")
             case .noNVGCurrency:
-                return "Made a takeoff or landing under NVGs without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]"
+                return String(localized: "Made a takeoff or landing under NVGs without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]")
             case .noNVGPassengerCurrency:
-                return "Made a takeoff or landing under NVGs with passengers without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]"
+                return String(localized: "Made a takeoff or landing under NVGs with passengers without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]")
             case .dualGiven8in24:
-                return "Exceeded maximum 8 hours of dual given in a 24-hour period [61.195(a)]"
+                return String(localized: "Exceeded maximum 8 hours of dual given in a 24-hour period [61.195(a)]")
             case .dualGivenTimeInType:
-                return "Gave training in a multi-engine, helicopter, or powered-lift aircraft without having 5 hours in type [61.195(f)]"
+                return String(localized: "Gave training in a multi-engine, helicopter, or powered-lift aircraft without having 5 hours in type [61.195(f)]")
         }
     }
 }

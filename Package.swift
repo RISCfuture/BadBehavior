@@ -11,14 +11,13 @@ let package = Package(
     ],
     targets: [
         .target(name: "libBadBehavior",
-                resources: [.copy("Localizable.xcstrings")]),
+                resources: [.process("Resources")]),
         .executableTarget(name: "BadBehavior",
                           dependencies: [
                             "libBadBehavior",
                             .product(name: "ArgumentParser", package: "swift-argument-parser")
                           ],
-                          resources: [.copy("Localizable.xcstrings")])
+                          resources: [.process("Resources")])
     ],
     swiftLanguageModes: [.v6]
 )
-

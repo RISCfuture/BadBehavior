@@ -76,6 +76,23 @@ package struct AircraftType: IdentifiableRecord {
         case weightShiftControl = "flight_category10"
         case UAV = "flight_category11"
         case other = "flight_category12"
+        
+        package var localizedDescription: String {
+            switch self {
+                case .airplane: return String(localized: "Airplane")
+                case .rotorcraft: return String(localized: "Rotorcraft")
+                case .poweredLift: return String(localized: "Powered Lift")
+                case .glider: return String(localized: "Glider")
+                case .lighterThanAir: return String(localized: "Lighter-Than-Air")
+                case .simulator: return String(localized: "Simulator")
+                case .trainingDevice: return String(localized: "Training Device")
+                case .PC_ATD: return String(localized: "PC-ATD")
+                case .poweredParachute: return String(localized: "Powered Parachute")
+                case .weightShiftControl: return String(localized: "Weight-Shift-Control")
+                case .UAV: return String(localized: "UAV")
+                case .other: return String(localized: "Other")
+            }
+        }
     }
     
     package enum Class: String, RecordEnum {
@@ -88,6 +105,20 @@ package struct AircraftType: IdentifiableRecord {
         case airship = "flight_aircraftClass7"
         case freeBalloon = "flight_aircraftClass8"
         case helicopter = "flight_aircraftClass9"
+        
+        package var localizedDescription: String {
+            switch self {
+                case .multiEngineLand: return String(localized: "Multi-Engine Land")
+                case .singleEngineLand: return String(localized: "Single-Engine Land")
+                case .multiEngineSea: return String(localized: "Multi-Engine Sea")
+                case .singleEngineSea: return String(localized: "Single-Engine Sea")
+                case .other: return String(localized: "Other")
+                case .gyroplane: return String(localized: "Gyroplane")
+                case .airship: return String(localized: "Airship")
+                case .freeBalloon: return String(localized: "Free Balloon")
+                case .helicopter: return String(localized: "Helicopter")
+            }
+        }
     }
     
     package enum EngineType: String, RecordEnum {
