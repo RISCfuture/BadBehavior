@@ -100,25 +100,25 @@ struct BadBehavior: AsyncParsableCommand {
     private func string(from violation: Violation) -> String {
         switch violation {
             case .noFlightReview:
-                return "Flight review not accomplished within prior 24 calendar months"
+                return "Flight review not accomplished within prior 24 calendar months [61.56(c)]"
             case .noPassengerCurrency:
-                return "Carried passengers without having completed required takeoffs and landings"
+                return "Carried passengers without having completed required takeoffs and landings [61.57(a)]"
             case .noNightPassengerCurrency:
-                return "Carried passengers at night without having completed required takeoffs and landings"
+                return "Carried passengers at night without having completed required takeoffs and landings [61.57(b)]"
             case .noIFRCurrency:
-                return "Flew under IFR without having completed required approaches/holds or IPC"
+                return "Flew under IFR without having completed required approaches/holds or IPC [61.57(c)]"
             case .noPPC:
-                return "Flew a type-rated aircraft without having completed a FAR 61.58 check"
+                return "Flew a type-rated aircraft without having completed a FAR 61.58 check [61.58(a)(1)]"
             case .noPPCInType:
-                return "Flew a type-rated aircraft without having completed a FAR 61.58 check in type"
+                return "Flew a type-rated aircraft without having completed a FAR 61.58 check in type [61.58(a)(2)]"
             case .noNVGCurrency:
-                return "Made a takeoff or landing under NVGs without having the required NVG takeoffs and landings or proificiency checks"
+                return "Made a takeoff or landing under NVGs without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]"
             case .noNVGPassengerCurrency:
-                return "Made a takeoff or landing under NVGs with passengers without having the required NVG takeoffs and landings or proificiency checks"
+                return "Made a takeoff or landing under NVGs with passengers without having the required NVG takeoffs and landings or proificiency checks [61.57(f)]"
             case .dualGiven8in24:
-                return "Exceeded maximum 8 hours of dual given in a 24-hour period"
+                return "Exceeded maximum 8 hours of dual given in a 24-hour period [61.195(a)]"
             case .dualGivenTimeInType:
-                return "Gave training in a multi-engine, helicopter, or powered-lift aircraft without having 5 hours in type"
+                return "Gave training in a multi-engine, helicopter, or powered-lift aircraft without having 5 hours in type [61.195(f)]"
         }
     }
 }
