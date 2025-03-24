@@ -43,8 +43,8 @@ package actor Validator {
             }
             
             var violations = Array<Violations>()
-            for try await v in group {
-                if let v = v { violations.append(v) }
+            for try await case let v? in group {
+                violations.append(v)
             }
             return violations
         }

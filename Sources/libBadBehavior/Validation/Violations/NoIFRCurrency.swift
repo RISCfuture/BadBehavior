@@ -22,8 +22,8 @@ actor NoIFRCurrency: ViolationChecker {
             }
             
             var flights = Array<Flight>()
-            for try await f in group {
-                if let f = f { flights.append(f) }
+            for try await case let f? in group {
+                flights.append(f)
             }
             return flights
         }
@@ -83,7 +83,7 @@ actor NoIFRCurrency: ViolationChecker {
             
             var flights = Array<Flight>()
             for try await f in group {
-                if let f = f { flights.append(f) }
+                if let f { flights.append(f) }
             }
             return flights
         }
