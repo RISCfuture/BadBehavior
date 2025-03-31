@@ -1,23 +1,23 @@
 final class NoNVGCurrency: ViolationChecker {
-    let flights: Array<Flight>
-    
-    required init(flights: Array<Flight>) {
+    let flights: [Flight]
+
+    required init(flights: [Flight]) {
         self.flights = flights
     }
-    
-    func check(flight: Flight) async throws -> Violation? {
+
+    func check(flight: Flight) throws -> Violation? {
         if flight.isDualReceived || !flight.isPIC { return nil }
         if flight.takeoffsNVG == 0 || flight.landingsNVG == 0 { return nil }
-        
-        let eligibleFlights = try await flightsWithinLast(calendarMonths: 4, ofFlight: flight),
+
+        let eligibleFlights = try flightsWithinLast(calendarMonths: 4, ofFlight: flight),
             totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.takeoffsNVG },
             totalLandings = eligibleFlights.reduce(0) { $0 + $1.landingsNVG },
             hasProficiencyCheck = eligibleFlights.contains(where: { isNVGProficiencyCheck(flight: flight, checkFlight: $0) })
         if totalTakeoffs < 3 || totalLandings < 3 && !hasProficiencyCheck { return .noNVGCurrency }
-        
+
         return nil
     }
-    
+
     private func isNVGProficiencyCheck(flight: Flight, checkFlight: Flight) -> Bool {
         guard let aircraft = flight.aircraft,
               let checkAircraft = checkFlight.aircraft else { return false }

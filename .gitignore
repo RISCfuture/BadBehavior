@@ -3,3 +3,7 @@
 /Packages
 /*.xcodeproj
 /.swiftpm
+
+
+# SwiftLint Remote Config Cache
+.swiftlint/RemoteConfigCache

@@ -1,19 +1,19 @@
 package struct AircraftType: IdentifiableRecord {
-    
+
     // MARK: Properties
-    
+
     package let id: String
     package let type: String
     package let category: Category
     package let `class`: Class?
     package let engineType: EngineType?
-    
+
     package let simType: SimulatorType?
     package let simAircraftCategoryClass: SimulatorCategoryClass?
-    
+
     // MARK: Computed Properties
-    
-    package var simCategory: AircraftType.Category? {
+
+    package var simCategory: Self.Category? {
         switch simAircraftCategoryClass {
             case .airplaneSingleEngineLand, .airplaneSingleEngineSea, .airplaneMultiEngineLand, .airplaneMultiEngineSea:
                 return .airplane
@@ -21,7 +21,7 @@ package struct AircraftType: IdentifiableRecord {
             case nil: return nil
         }
     }
-    package var simClass: AircraftType.Class? {
+    package var simClass: Self.Class? {
         switch simAircraftCategoryClass {
             case .airplaneSingleEngineLand: return .singleEngineLand
             case .airplaneSingleEngineSea: return .singleEngineSea
@@ -31,14 +31,14 @@ package struct AircraftType: IdentifiableRecord {
             case nil: return nil
         }
     }
-    
+
     // MARK: Initializers
-    
+
     init(aircraftType: CNAircraftType,
          typeCodeProperty: KeyPath<CNAircraftType, String?>,
          simTypeProperty: KeyPath<CNAircraftType, String?>,
          simCategoryProperty: KeyPath<CNAircraftType, String?>) {
-        
+
         id = aircraftType.aircraftType_type
         type = aircraftType[keyPath: typeCodeProperty] ?? aircraftType.aircraftType_type
         category = .init(rawValue: aircraftType.aircraftType_category.logTenProperty_key)!
@@ -46,7 +46,7 @@ package struct AircraftType: IdentifiableRecord {
             guard let title = aircraftType.aircraftType_aircraftClass?.logTenProperty_key else { return nil }
             return .init(rawValue: title)
         }()
-        
+
         simType = {
             guard let typeString = aircraftType[keyPath: simTypeProperty] else { return nil }
             return .init(rawValue: typeString)
@@ -60,9 +60,9 @@ package struct AircraftType: IdentifiableRecord {
             return .init(rawValue: key)
         }()
     }
-    
+
     // MARK: Enums
-    
+
     package enum Category: String, RecordEnum {
         case airplane = "flight_category1"
         case rotorcraft = "flight_category2"
@@ -76,7 +76,7 @@ package struct AircraftType: IdentifiableRecord {
         case weightShiftControl = "flight_category10"
         case UAV = "flight_category11"
         case other = "flight_category12"
-        
+
         package var localizedDescription: String {
             switch self {
                 case .airplane: return String(localized: "Airplane")
@@ -94,7 +94,7 @@ package struct AircraftType: IdentifiableRecord {
             }
         }
     }
-    
+
     package enum Class: String, RecordEnum {
         case multiEngineLand = "flight_aircraftClass1"
         case singleEngineLand = "flight_aircraftClass2"
@@ -105,7 +105,7 @@ package struct AircraftType: IdentifiableRecord {
         case airship = "flight_aircraftClass7"
         case freeBalloon = "flight_aircraftClass8"
         case helicopter = "flight_aircraftClass9"
-        
+
         package var localizedDescription: String {
             switch self {
                 case .multiEngineLand: return String(localized: "Multi-Engine Land")
@@ -120,7 +120,7 @@ package struct AircraftType: IdentifiableRecord {
             }
         }
     }
-    
+
     package enum EngineType: String, RecordEnum {
         case jet = "flight_engineType1"
         case turbine = "flight_engineType2"
@@ -135,14 +135,14 @@ package struct AircraftType: IdentifiableRecord {
         case other = "flight_engineType11"
         case electric = "flight_engineType12"
     }
-    
+
     package enum SimulatorType: String, RecordEnum {
         case BATD
         case AATD
         case FTD
         case FFS
     }
-    
+
     package enum SimulatorCategoryClass: String, RecordEnum {
         case airplaneSingleEngineLand = "ASEL"
         case airplaneSingleEngineSea = "ASES"

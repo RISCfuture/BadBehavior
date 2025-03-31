@@ -1,14 +1,14 @@
 package struct Approach: Record {
-    
+
     // MARK: Properties
-    
+
     package let place: Place?
     package let type: ApproachType?
     package let runway: String?
     package let count: UInt?
-    
+
     // MARK: Initializers
-    
+
     init(approach: CNApproach) {
         place = .init(place: approach.approach_place)
         type = {
@@ -18,9 +18,9 @@ package struct Approach: Record {
         runway = approach.approach_comment
         count = approach.approach_quantity?.uintValue
     }
-    
+
     // MARK: Enums
-    
+
     package enum ApproachType: String, RecordEnum {
         case GCA
         case GLS

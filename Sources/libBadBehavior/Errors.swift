@@ -23,7 +23,7 @@ extension Errors: LocalizedError {
                 return String(localized: "Missing Sim Type for aircraft type “\(type)”")
         }
     }
-    
+
     package var failureReason: String? {
         switch self {
             case .couldntCreateStore:
@@ -38,7 +38,7 @@ extension Errors: LocalizedError {
                 return String(localized: "Simulator requires a Sim Type entry.")
         }
     }
-    
+
     package var recoverySuggestion: String? {
         switch self {
             case .couldntCreateStore:

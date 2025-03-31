@@ -1,16 +1,15 @@
 package protocol Record: Codable, Sendable {
-    
 }
 
 package protocol IdentifiableRecord: Record, Identifiable, Hashable, Equatable {
 }
 
-extension IdentifiableRecord {
-    static package func == (lhs: Self, rhs: Self) -> Bool {
+package extension IdentifiableRecord {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
-    
-    package func hash(into hasher: inout Hasher) {
+
+    func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

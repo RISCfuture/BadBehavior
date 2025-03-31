@@ -1,18 +1,18 @@
 import CoreData
 
-fileprivate let typeCodeField = "Type Code"
-fileprivate let simTypeField = "Sim Type"
-fileprivate let simCategoryField = "Sim A/C Cat"
+private let typeCodeField = "Type Code"
+private let simTypeField = "Sim Type"
+private let simCategoryField = "Sim A/C Cat"
 
 extension Reader {
-    func fetchAircraft(context: NSManagedObjectContext) throws -> Array<Aircraft> {
+    func fetchAircraft(context: NSManagedObjectContext) throws -> [Aircraft] {
         let request = CNAircraft.fetchRequest()
         let aircraft = try context.fetch(request)
-        
+
         let typeCodeProperty = try aircraftTypeCustomAttribute(for: typeCodeField, context: context)
         let simTypeProperty = try aircraftTypeCustomAttribute(for: simTypeField, context: context)
         let simCategoryProperty = try aircraftTypeCustomAttribute(for: simCategoryField, context: context)
-        
+
         return aircraft.map { aircraft in
                 .init(aircraft: aircraft,
                       typeCodeProperty: typeCodeProperty,
@@ -20,7 +20,7 @@ extension Reader {
                       simCategoryProperty: simCategoryProperty)
         }
     }
-    
+
     private func aircraftTypeCustomAttribute(for title: String, context: NSManagedObjectContext) throws -> KeyPath<CNAircraftType, String?> {
         let request = CNLogTenCustomizationProperty.fetchRequest(title: title, keyPrefix: "aircraftType_customAttribute")
         let result = try context.fetch(request)
@@ -36,7 +36,7 @@ extension Reader {
             default: preconditionFailure("Unknown custom attribute \(property.logTenProperty_key)")
         }
     }
-    
+
     private func aircraftCustomAttribute(for title: String, context: NSManagedObjectContext) throws -> KeyPath<CNAircraft, Bool> {
         let request = CNLogTenCustomizationProperty.fetchRequest(title: title, keyPrefix: "aircraft_customAttribute")
         let result = try context.fetch(request)

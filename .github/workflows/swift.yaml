@@ -26,3 +26,9 @@ jobs:
           swift-version: ${{ matrix.swift }}
       - name: Build
         run: swift build -v
+  lint:
+    name: Run Swiftlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: norio-nomura/action-swiftlint@3.2.1

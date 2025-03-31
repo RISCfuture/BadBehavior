@@ -1,11 +1,11 @@
-import Foundation
 import CoreData
+import Foundation
 
 @objc(CNFlightPassengers)
 final class CNFlightPassengers: NSManagedObject {
-    
+
     // MARK: Managed Properties
-    
+
     @NSManaged private var flightPassengers_pax1: CNPerson?
     @NSManaged private var flightPassengers_pax2: CNPerson?
     @NSManaged private var flightPassengers_pax3: CNPerson?
@@ -26,10 +26,10 @@ final class CNFlightPassengers: NSManagedObject {
     @NSManaged private var flightPassengers_pax18: CNPerson?
     @NSManaged private var flightPassengers_pax19: CNPerson?
     @NSManaged private var flightPassengers_pax20: CNPerson?
-    
+
     // MARK: Computed Properties
-    
-    var passengers: Array<CNPerson> {
+
+    var passengers: [CNPerson] {
         [
             flightPassengers_pax1,
             flightPassengers_pax2,

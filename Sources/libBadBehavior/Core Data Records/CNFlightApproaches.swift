@@ -1,11 +1,11 @@
-import Foundation
 import CoreData
+import Foundation
 
 @objc(CNFlightApproaches)
 final class CNFlightApproaches: NSManagedObject {
-    
+
     // MARK: Managed Properties
-    
+
     @NSManaged private var flightApproaches_approach1: CNApproach?
     @NSManaged private var flightApproaches_approach2: CNApproach?
     @NSManaged private var flightApproaches_approach3: CNApproach?
@@ -16,10 +16,10 @@ final class CNFlightApproaches: NSManagedObject {
     @NSManaged private var flightApproaches_approach8: CNApproach?
     @NSManaged private var flightApproaches_approach9: CNApproach?
     @NSManaged private var flightApproaches_approach10: CNApproach?
-    
+
     // MARK: Computed Properties
-    
-    var approaches: Array<CNApproach> {
+
+    var approaches: [CNApproach] {
         [
             flightApproaches_approach1,
             flightApproaches_approach2,

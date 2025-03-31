@@ -15,5 +15,5 @@ package enum Violation: Codable, Sendable {
 
 package struct Violations: Codable, Sendable {
     package let flight: Flight
-    package let violations: Array<Violation>
+    package let violations: [Violation]
 }
