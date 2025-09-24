@@ -1,17 +1,17 @@
 final class DualGiven8In24: ViolationChecker {
-    let flights: [Flight]
+  let flights: [Flight]
 
-    required init(flights: [Flight]) {
-        self.flights = flights
-    }
+  required init(flights: [Flight]) {
+    self.flights = flights
+  }
 
-    func check(flight: Flight) throws -> Violation? {
-        if !flight.isDualGiven || !flight.isPIC { return nil }
+  func check(flight: Flight) throws -> Violation? {
+    if !flight.isDualGiven || !flight.isPIC { return nil }
 
-        let eligibleFlights = try flightsWithinLast(hours: 24, ofFlight: flight),
-            dualGivenTime = eligibleFlights.reduce(0) { $0 + $1.dualGivenTime },
-            dualGivenHours = Double(dualGivenTime) / 60.0
+    let eligibleFlights = try flightsWithinLast(hours: 24, ofFlight: flight)
+    let dualGivenTime = eligibleFlights.reduce(0) { $0 + $1.dualGivenTime }
+    let dualGivenHours = Double(dualGivenTime) / 60.0
 
-        return dualGivenHours > 8.0 ? .dualGiven8in24 : nil
-    }
+    return dualGivenHours > 8.0 ? .dualGiven8in24 : nil
+  }
 }
