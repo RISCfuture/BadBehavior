@@ -1,5 +1,24 @@
 import Foundation
 
+/// Checks for IFR flights without required instrument currency per FAR 61.57(c).
+///
+/// To act as pilot in command under IFR, the pilot must have completed within the
+/// preceding 6 calendar months:
+/// - 6 instrument approaches
+/// - Holding procedures
+/// - Intercepting and tracking courses (assumed if approaches/holds were flown)
+///
+/// ## Grace Period
+///
+/// If instrument currency lapses, there is a 6-month grace period during which
+/// approaches and holds can restore currency. However, if 12 months pass without
+/// the required experience, an IPC (Instrument Proficiency Check) is required.
+///
+/// ## Implementation Notes
+///
+/// This checker uses an actor model with pre-computed currency data because
+/// determining whether a flight counts toward currency requires recursive
+/// lookback through flight history.
 actor NoIFRCurrency: ViolationChecker {
   let flights: [Flight]
 

@@ -1,5 +1,29 @@
 import Foundation
 
+/// Validates flights against FAR Part 61 and 91 currency requirements.
+///
+/// The `Validator` actor processes a collection of flights and identifies potential
+/// regulatory violations. It uses Swift Concurrency to efficiently check each flight
+/// against all applicable rules in parallel.
+///
+/// ## Usage
+///
+/// ```swift
+/// let validator = Validator(flights: flights)
+/// let violations = try await validator.violations()
+/// ```
+///
+/// ## Checked Regulations
+///
+/// The validator checks for violations of:
+/// - **FAR 61.56(c)**: Flight review currency (24 calendar months)
+/// - **FAR 61.57(a)**: Passenger currency (takeoffs/landings in 90 days)
+/// - **FAR 61.57(b)**: Night passenger currency
+/// - **FAR 61.57(c)**: IFR currency (6 approaches + hold in 6 months)
+/// - **FAR 61.57(f)**: NVG currency and passenger currency
+/// - **FAR 61.58**: Proficiency checks for type-rated aircraft
+/// - **FAR 61.195(a)**: CFI 8-hour daily limit
+/// - **FAR 61.195(f)**: CFI time-in-type requirements
 package actor Validator {
   // MARK: Fields
 
@@ -20,12 +44,30 @@ package actor Validator {
 
   // MARK: Init
 
+  /// Creates a validator for the given flights.
+  ///
+  /// The flights are automatically sorted chronologically for proper currency tracking.
+  /// Earlier flights are checked first to establish a currency baseline.
+  ///
+  /// - Parameter flights: The flights to validate.
   package init(flights: [Flight]) {
     self.flights = flights.sorted(by: { $0.date < $1.date })
   }
 
   // MARK: Scanner
 
+  /// Validates all flights and returns any violations found.
+  ///
+  /// Each flight is checked against all 10 violation checkers. The validation process:
+  /// 1. Initializes all checkers with the complete flight list
+  /// 2. Calls `setup()` on each checker for any expensive pre-computation
+  /// 3. Checks each flight in parallel using a task group
+  /// 4. Collects and returns only flights that have violations
+  ///
+  /// - Returns: An array of ``Violations`` containing only flights with detected issues.
+  ///   Flights without violations are not included in the results.
+  ///
+  /// - Throws: Errors from individual violation checkers if they encounter invalid data.
   package func violations() async throws -> [Violations] {
     return try await withThrowingTaskGroup(of: Violations?.self, returning: Array<Violations>.self)
     { group in

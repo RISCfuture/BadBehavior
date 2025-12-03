@@ -1,3 +1,11 @@
+/// Checks for flights carrying passengers without required currency per FAR 61.57(a).
+///
+/// To carry passengers, the pilot must have made at least 3 takeoffs and 3 landings
+/// within the preceding 90 days in the same category, class, and (if type-rated) type.
+///
+/// ## Tailwheel Requirements
+///
+/// For tailwheel aircraft, the landings must be to a full stop (FAR 61.57(a)(1)(ii)).
 final class NoPassengerCurrency: ViolationChecker {
   let flights: [Flight]
 

@@ -1,3 +1,13 @@
+/// Checks for night flights with passengers without required currency per FAR 61.57(b).
+///
+/// To carry passengers at night, the pilot must have made at least 3 takeoffs and
+/// 3 full-stop landings at night within the preceding 90 days in the same category,
+/// class, and (if type-rated) type.
+///
+/// ## Night Definition
+///
+/// Night is defined as 1 hour after sunset to 1 hour before sunrise per FAR 1.1.
+/// For currency purposes, landings must be to a full stop.
 final class NoNightPassengerCurrency: ViolationChecker {
   let flights: [Flight]
 

@@ -5,6 +5,14 @@ private let simTypeField = "Sim Type"
 private let simCategoryField = "Sim A/C Cat"
 
 extension Reader {
+  /// Fetches all aircraft from the LogTen Pro database.
+  ///
+  /// This method retrieves all aircraft records and converts them to ``Aircraft`` instances,
+  /// resolving custom property mappings for type code, simulator type, and simulator category.
+  ///
+  /// - Parameter context: The Core Data managed object context to use for fetching.
+  /// - Returns: An array of ``Aircraft`` instances.
+  /// - Throws: ``Errors/missingProperty(_:model:)`` if required custom fields are not configured.
   func fetchAircraft(context: NSManagedObjectContext) throws -> [Aircraft] {
     let request = CNAircraft.fetchRequest()
     let aircraft = try context.fetch(request)

@@ -5,6 +5,24 @@ import libBadBehavior
 // NOTE: This tool uploads its results to the FAA Enforcement Division. Please
 // ensure you have an active connection to the Internet before executing it.
 
+/// Command-line tool that scans a LogTen Pro logbook for FAR Part 91 violations.
+///
+/// BadBehavior reads flight data from LogTen Pro for Mac and validates each flight
+/// against FAR Part 61 and 91 currency requirements. It reports any flights that
+/// may have violated regulations.
+///
+/// ## Usage
+///
+/// Run without arguments to scan the default LogTen Pro installation:
+/// ```
+/// BadBehavior
+/// ```
+///
+/// Specify custom file locations:
+/// ```
+/// BadBehavior --logten-file /path/to/LogTenCoreDataStore.sql \
+///             --logten-managed-object-model /path/to/CNLogBookDocument.momd
+/// ```
 @main
 struct BadBehavior: AsyncParsableCommand {
 
@@ -52,6 +70,10 @@ struct BadBehavior: AsyncParsableCommand {
 
   // MARK: Arguments
 
+  /// Path to the LogTen Pro SQLite database file.
+  ///
+  /// The default path is the standard LogTen Pro installation location:
+  /// `~/Library/Group Containers/group.com.coradine.LogTenPro/.../LogTenCoreDataStore.sql`
   @Option(
     help: "The LogTenCoreDataStore.sql file containing the logbook entries.",
     completion: .file(extensions: ["sql"]),
@@ -59,6 +81,10 @@ struct BadBehavior: AsyncParsableCommand {
   )
   var logtenFile = Self.logtenDataStoreURL
 
+  /// Path to the LogTen Pro Core Data managed object model.
+  ///
+  /// The default path is the standard LogTen Pro application bundle location:
+  /// `/Applications/LogTen.app/Contents/Resources/CNLogBookDocument.momd`
   @Option(
     help: "The location of the LogTen Pro managed object model file.",
     completion: .file(extensions: ["momd"]),
@@ -68,6 +94,12 @@ struct BadBehavior: AsyncParsableCommand {
 
   // MARK: Main
 
+  /// Executes the violation scan.
+  ///
+  /// This method:
+  /// 1. Reads all flights from the LogTen Pro database
+  /// 2. Validates each flight against FAR currency requirements
+  /// 3. Prints violations grouped by flight to stdout
   mutating func run() async throws {
     print(String(localized: "Processing…"))
 

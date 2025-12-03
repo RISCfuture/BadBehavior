@@ -1,0 +1,100 @@
+digraph BadBehavior {
+    // Graph settings
+    rankdir=TB
+    splines=ortho
+    nodesep=0.8
+    ranksep=1.0
+    bgcolor="transparent"
+
+    // Node defaults
+    node [
+        shape=box
+        style="rounded,filled"
+        fontname="SF Pro Display"
+        fontsize=14
+        penwidth=2
+    ]
+
+    // Edge defaults
+    edge [
+        fontname="SF Pro Text"
+        fontsize=11
+        penwidth=1.5
+    ]
+
+    // Input layer
+    subgraph cluster_input {
+        label="Input"
+        labeljust=l
+        fontname="SF Pro Display"
+        fontsize=16
+        style="rounded,dashed"
+        color="#8E8E93"
+        bgcolor="#F2F2F7"
+
+        logten [label="LogTen Pro\nCore Data Store" fillcolor="#007AFF" fontcolor="white"]
+        model [label="Managed Object\nModel" fillcolor="#007AFF" fontcolor="white"]
+    }
+
+    // Processing layer
+    subgraph cluster_processing {
+        label="Processing"
+        labeljust=l
+        fontname="SF Pro Display"
+        fontsize=16
+        style="rounded,dashed"
+        color="#8E8E93"
+        bgcolor="#F2F2F7"
+
+        reader [label="Reader" fillcolor="#34C759" fontcolor="white"]
+        validator [label="Validator" fillcolor="#FF9500" fontcolor="white"]
+    }
+
+    // Data models
+    subgraph cluster_models {
+        label="Data Models"
+        labeljust=l
+        fontname="SF Pro Display"
+        fontsize=16
+        style="rounded,dashed"
+        color="#8E8E93"
+        bgcolor="#F2F2F7"
+
+        flight [label="Flight" fillcolor="#5856D6" fontcolor="white"]
+        aircraft [label="Aircraft" fillcolor="#5856D6" fontcolor="white"]
+        aircrafttype [label="AircraftType" fillcolor="#5856D6" fontcolor="white"]
+        person [label="Person" fillcolor="#5856D6" fontcolor="white"]
+        place [label="Place" fillcolor="#5856D6" fontcolor="white"]
+        approach [label="Approach" fillcolor="#5856D6" fontcolor="white"]
+    }
+
+    // Output layer
+    subgraph cluster_output {
+        label="Output"
+        labeljust=l
+        fontname="SF Pro Display"
+        fontsize=16
+        style="rounded,dashed"
+        color="#8E8E93"
+        bgcolor="#F2F2F7"
+
+        violations [label="Violations" fillcolor="#FF3B30" fontcolor="white"]
+        violation [label="Violation" fillcolor="#FF3B30" fontcolor="white"]
+    }
+
+    // Relationships
+    logten -> reader
+    model -> reader
+    reader -> flight [label="produces"]
+
+    flight -> aircraft
+    aircraft -> aircrafttype
+    flight -> person
+    flight -> place
+    flight -> approach
+    approach -> place
+
+    flight -> validator [label="input"]
+    validator -> violations [label="output"]
+    violations -> violation [label="contains"]
+}

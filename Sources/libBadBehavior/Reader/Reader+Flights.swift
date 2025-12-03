@@ -10,6 +10,20 @@ private let safetyPilotField = "Safety Pilot"
 private let examinerField = "Examiner"
 
 extension Reader {
+  /// Fetches all flights from the LogTen Pro database and associates them with aircraft.
+  ///
+  /// This method retrieves all flight records and converts them to ``Flight`` instances,
+  /// resolving custom property mappings for night full stops, proficiency checks, checkrides,
+  /// and custom crew roles.
+  ///
+  /// Flights are matched to their associated aircraft by registration number. Flights without
+  /// a matching aircraft in the provided array are excluded from the results.
+  ///
+  /// - Parameters:
+  ///   - context: The Core Data managed object context to use for fetching.
+  ///   - aircraft: The array of aircraft to match against flights.
+  /// - Returns: An array of ``Flight`` instances with their associated aircraft.
+  /// - Throws: ``Errors/missingProperty(_:model:)`` if required custom fields are not configured.
   func fetchFlights(context: NSManagedObjectContext, aircraft: [Aircraft]) throws -> [Flight] {
     let request = CNFlight.fetchRequest()
     let flights = try context.fetch(request)

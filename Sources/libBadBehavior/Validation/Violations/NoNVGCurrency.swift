@@ -1,3 +1,11 @@
+/// Checks for NVG (Night Vision Goggle) flights without required currency per FAR 61.57(f).
+///
+/// To act as pilot in command using NVGs, the pilot must have completed within the
+/// preceding 4 calendar months either:
+/// - 3 NVG takeoffs and 3 NVG landings, OR
+/// - An NVG proficiency check (FAR 61.31(k))
+///
+/// The takeoffs/landings must be in the same aircraft category.
 final class NoNVGCurrency: ViolationChecker {
   let flights: [Flight]
 

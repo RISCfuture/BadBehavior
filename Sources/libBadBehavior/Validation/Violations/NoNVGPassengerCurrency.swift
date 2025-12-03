@@ -1,3 +1,11 @@
+/// Checks for NVG flights with passengers without required currency per FAR 61.57(f).
+///
+/// To carry passengers while using NVGs, the pilot must have completed within the
+/// preceding 2 calendar months either:
+/// - 3 NVG takeoffs and 3 NVG landings, OR
+/// - An NVG proficiency check (FAR 61.31(k))
+///
+/// This is a stricter requirement than solo NVG flight (which allows 4 months).
 final class NoNVGPassengerCurrency: ViolationChecker {
   let flights: [Flight]
 

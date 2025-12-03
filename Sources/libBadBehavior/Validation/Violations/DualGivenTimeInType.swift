@@ -1,3 +1,13 @@
+/// Checks for CFI flights without required time in type per FAR 61.195(f).
+///
+/// To give training in a multiengine airplane, helicopter, or powered-lift aircraft,
+/// the flight instructor must have at least 5 flight hours as pilot in command in
+/// the specific make and model of aircraft.
+///
+/// This rule applies to:
+/// - Multiengine land and sea airplanes
+/// - Rotorcraft (helicopters and gyroplanes)
+/// - Powered-lift aircraft
 final class DualGivenTimeInType: ViolationChecker {
   let flights: [Flight]
 
