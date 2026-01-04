@@ -42,7 +42,7 @@ private let examinerField = "Examiner"
 ///
 /// If any required custom field is missing, an ``Errors/missingProperty(_:model:)`` error
 /// will be thrown.
-package class Reader {
+package final class Reader {
   private let container: NSPersistentContainer
 
   /// Creates a new Reader connected to a LogTen Pro database.
@@ -103,8 +103,8 @@ package class Reader {
   package func read() async throws -> [Flight] {
     let context = container.newBackgroundContext()
     return try await context.perform {
-      let aircraft = try self.fetchAircraft(context: context)
-      return try self.fetchFlights(context: context, aircraft: aircraft)
+      let aircraft = try Self.fetchAircraft(context: context)
+      return try Self.fetchFlights(context: context, aircraft: aircraft)
     }
   }
 }

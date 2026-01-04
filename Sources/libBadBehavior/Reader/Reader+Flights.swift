@@ -24,7 +24,8 @@ extension Reader {
   ///   - aircraft: The array of aircraft to match against flights.
   /// - Returns: An array of ``Flight`` instances with their associated aircraft.
   /// - Throws: ``Errors/missingProperty(_:model:)`` if required custom fields are not configured.
-  func fetchFlights(context: NSManagedObjectContext, aircraft: [Aircraft]) throws -> [Flight] {
+  static func fetchFlights(context: NSManagedObjectContext, aircraft: [Aircraft]) throws -> [Flight]
+  {
     let request = CNFlight.fetchRequest()
     let flights = try context.fetch(request)
 
@@ -59,7 +60,7 @@ extension Reader {
     }
   }
 
-  private func flightCustomLanding(for title: String, context: NSManagedObjectContext) throws
+  private static func flightCustomLanding(for title: String, context: NSManagedObjectContext) throws
     -> KeyPath<CNFlight, NSNumber?>
   {
     let request = CNLogTenCustomizationProperty.fetchRequest(
@@ -85,7 +86,7 @@ extension Reader {
     }
   }
 
-  private func flightCustomNote(for title: String, context: NSManagedObjectContext) throws
+  private static func flightCustomNote(for title: String, context: NSManagedObjectContext) throws
     -> KeyPath<CNFlight, String?>
   {
     let request = CNLogTenCustomizationProperty.fetchRequest(
@@ -111,7 +112,8 @@ extension Reader {
     }
   }
 
-  private func flightCrewCustomPerson(for title: String, context: NSManagedObjectContext) throws
+  private static func flightCrewCustomPerson(for title: String, context: NSManagedObjectContext)
+    throws
     -> KeyPath<CNFlightCrew, CNPerson?>
   {
     let request = CNLogTenCustomizationProperty.fetchRequest(

@@ -13,7 +13,7 @@ extension Reader {
   /// - Parameter context: The Core Data managed object context to use for fetching.
   /// - Returns: An array of ``Aircraft`` instances.
   /// - Throws: ``Errors/missingProperty(_:model:)`` if required custom fields are not configured.
-  func fetchAircraft(context: NSManagedObjectContext) throws -> [Aircraft] {
+  static func fetchAircraft(context: NSManagedObjectContext) throws -> [Aircraft] {
     let request = CNAircraft.fetchRequest()
     let aircraft = try context.fetch(request)
 
@@ -34,7 +34,10 @@ extension Reader {
     }
   }
 
-  private func aircraftTypeCustomAttribute(for title: String, context: NSManagedObjectContext)
+  private static func aircraftTypeCustomAttribute(
+    for title: String,
+    context: NSManagedObjectContext
+  )
     throws -> KeyPath<CNAircraftType, String?>
   {
     let request = CNLogTenCustomizationProperty.fetchRequest(
@@ -55,7 +58,8 @@ extension Reader {
     }
   }
 
-  private func aircraftCustomAttribute(for title: String, context: NSManagedObjectContext) throws
+  private static func aircraftCustomAttribute(for title: String, context: NSManagedObjectContext)
+    throws
     -> KeyPath<CNAircraft, Bool>
   {
     let request = CNLogTenCustomizationProperty.fetchRequest(
