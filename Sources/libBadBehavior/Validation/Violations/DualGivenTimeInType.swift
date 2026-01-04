@@ -9,10 +9,10 @@
 /// - Rotorcraft (helicopters and gyroplanes)
 /// - Powered-lift aircraft
 final class DualGivenTimeInType: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
@@ -29,11 +29,13 @@ final class DualGivenTimeInType: ViolationChecker {
       default: return nil
     }
 
-    let eligibleFlights = flights.filter { checkFlight in
+    // Check all prior flights in the same type
+    let priorFlights = flights(before: flight)
+    let sameTypeFlights = priorFlights.filter { checkFlight in
       guard let checkAircraft = checkFlight.aircraft else { return false }
       return checkAircraft.type.type == aircraft.type.type
     }
-    let timeInType = eligibleFlights.reduce(0) { $0 + $1.PICTime }
+    let timeInType = sameTypeFlights.reduce(0) { $0 + $1.PICTime }
 
     return timeInType < 5 * 60 ? .dualGivenTimeInType : nil
   }

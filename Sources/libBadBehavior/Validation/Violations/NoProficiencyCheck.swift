@@ -6,10 +6,10 @@
 /// - Powered-lift aircraft
 /// - Aircraft with maximum gross weight of 12,500 pounds or more
 final class NoProficiencyCheck: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
@@ -18,7 +18,11 @@ final class NoProficiencyCheck: ViolationChecker {
     if flight.isDualReceived || flight.isRecurrent { return nil }
     if !aircraft.typeRatingRequired { return nil }
 
-    let eligibleFlights = try flightsWithinLast(calendarMonths: 12, ofFlight: flight)
+    let eligibleFlights = flights(
+      within: .calendarMonths(12),
+      of: flight,
+      matching: .none(for: flight)
+    )
     return eligibleFlights.contains(where: \.isRecurrent) ? nil : .noPPC
   }
 }

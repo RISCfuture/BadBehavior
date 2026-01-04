@@ -4,10 +4,10 @@
 /// complete a proficiency check in the same type of aircraft (or an approved simulator)
 /// within the preceding 12 calendar months.
 final class NoProficiencyCheckInType: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
@@ -16,10 +16,15 @@ final class NoProficiencyCheckInType: ViolationChecker {
     if flight.isDualReceived || flight.isRecurrent { return nil }
     if !aircraft.typeRatingRequired { return nil }
 
-    let eligibleFlights = try flightsWithinLast(
-      calendarMonths: 24,
-      ofFlight: flight,
-      matchingTypeIfRequired: true
+    let eligibleFlights = flights(
+      within: .calendarMonths(24),
+      of: flight,
+      matching: FlightMatchCriteria(
+        referenceFlight: flight,
+        matchCategory: false,
+        matchClass: false,
+        matchTypeIfRequired: true
+      )
     )
     return eligibleFlights.contains(where: \.isRecurrent) ? nil : .noPPCInType
   }

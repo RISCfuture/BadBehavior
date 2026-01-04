@@ -19,10 +19,10 @@
 ///
 /// - TODO: Add Part 142 training program exception when custom field is available
 final class NoNightPassengerCurrency: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
@@ -31,12 +31,10 @@ final class NoNightPassengerCurrency: ViolationChecker {
     if !flight.isNight { return nil }
 
     // First check standard 90-day currency
-    let eligibleFlights90 = try flightsWithinLast(
-      calendarDays: 90,
-      ofFlight: flight,
-      matchingCategory: true,
-      matchingClass: true,
-      matchingTypeIfRequired: true
+    let eligibleFlights90 = flights(
+      within: .calendarDays(90),
+      of: flight,
+      matching: .full(for: flight)
     )
 
     if hasNightCurrency(flights: eligibleFlights90, flight: flight) {
@@ -44,13 +42,11 @@ final class NoNightPassengerCurrency: ViolationChecker {
     }
 
     // If standard currency fails, check for alternate currency exception (FAR 61.57(e)(4))
-    if try qualifiesForAlternateCurrency(flight: flight) {
-      let eligibleFlights6mo = try flightsWithinLast(
-        calendarMonths: 6,
-        ofFlight: flight,
-        matchingCategory: true,
-        matchingClass: true,
-        matchingTypeIfRequired: true
+    if qualifiesForAlternateCurrency(flight: flight) {
+      let eligibleFlights6mo = flights(
+        within: .calendarMonths(6),
+        of: flight,
+        matching: .full(for: flight)
       )
 
       if hasNightCurrency(flights: eligibleFlights6mo, flight: flight) {
@@ -85,7 +81,7 @@ final class NoNightPassengerCurrency: ViolationChecker {
   /// - Aircraft is turbine-powered and requires a type rating (proxy for multi-crew)
   /// - Pilot has 1,500+ hours total time
   /// - Pilot has 15+ hours in type within preceding 90 days
-  private func qualifiesForAlternateCurrency(flight: Flight) throws -> Bool {
+  private func qualifiesForAlternateCurrency(flight: Flight) -> Bool {
     guard let aircraft = flight.aircraft else { return false }
 
     // Must be turbine-powered aircraft requiring type rating (heuristic for multi-crew)
@@ -98,7 +94,7 @@ final class NoNightPassengerCurrency: ViolationChecker {
     guard totalTime >= 1500 else { return false }
 
     // Check for 15 hours in type within 90 days
-    let timeInType = try timeInType(for: flight, withinDays: 90)
+    let timeInType = timeInType(for: flight, withinDays: 90)
     guard timeInType >= 15 else { return false }
 
     return true
@@ -116,21 +112,19 @@ final class NoNightPassengerCurrency: ViolationChecker {
 
   /// Calculates total flight time (PIC + SIC) before the given flight.
   private func totalFlightTime(before flight: Flight) -> Double {
-    let priorFlights = flights.filter { $0.date < flight.date }
+    let priorFlights = flights(before: flight)
     let totalMinutes = priorFlights.reduce(0) { $0 + $1.PICTime + $1.SICTime }
     return Double(totalMinutes) / 60.0
   }
 
   /// Calculates time in type within the specified number of days before the flight.
-  private func timeInType(for flight: Flight, withinDays days: Int) throws -> Double {
+  private func timeInType(for flight: Flight, withinDays days: Int) -> Double {
     guard let aircraft = flight.aircraft else { return 0 }
 
-    let eligibleFlights = try flightsWithinLast(
-      calendarDays: days,
-      ofFlight: flight,
-      matchingCategory: true,
-      matchingClass: true,
-      matchingTypeIfRequired: true
+    let eligibleFlights = flights(
+      within: .calendarDays(days),
+      of: flight,
+      matching: .full(for: flight)
     )
 
     // Only count flights in the exact same type

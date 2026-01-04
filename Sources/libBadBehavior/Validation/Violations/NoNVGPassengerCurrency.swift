@@ -7,10 +7,10 @@
 ///
 /// This is a stricter requirement than solo NVG flight (which allows 4 months).
 final class NoNVGPassengerCurrency: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
@@ -18,7 +18,11 @@ final class NoNVGPassengerCurrency: ViolationChecker {
     if !flight.hasPassengers { return nil }
     if flight.takeoffsNVG == 0 || flight.landingsNVG == 0 { return nil }
 
-    let eligibleFlights = try flightsWithinLast(calendarMonths: 2, ofFlight: flight)
+    let eligibleFlights = flights(
+      within: .calendarMonths(2),
+      of: flight,
+      matching: .none(for: flight)
+    )
     let totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.takeoffsNVG }
     let totalLandings = eligibleFlights.reduce(0) { $0 + $1.landingsNVG }
     let hasProficiencyCheck = eligibleFlights.contains(where: {

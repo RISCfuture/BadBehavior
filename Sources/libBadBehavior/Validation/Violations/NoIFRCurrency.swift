@@ -20,130 +20,101 @@ import Foundation
 /// determining whether a flight counts toward currency requires recursive
 /// lookback through flight history.
 actor NoIFRCurrency: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
   private var countsForIFRCurrency = [URL: Bool]()
 
-  init(flights: [Flight]) {
-    self.flights = flights
+  init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
-  func check(flight: Flight) async throws -> Violation? {
+  func check(flight: Flight) throws -> Violation? {
     if flight.isDualReceived || !flight.isPIC { return nil }
     if !flight.isIFR || flight.safetyPilotOnboard || flight.isIPC { return nil }
 
-    let eligibleFlights = try await withThrowingTaskGroup(
-      of: Flight?.self,
-      returning: Array<Flight>.self
-    ) { group in
-      for f in try flightsWithinLast(calendarMonths: 6, ofFlight: flight, matchingCategory: true) {
-        group.addTask {
-          if !f.hasApproaches && !f.hasHolds && !f.isIPC { return nil }
-          return try await self.isWithinGracePeriod(f) ? f : nil
-        }
-      }
-
-      var flights = [Flight]()
-      for try await case let f? in group {
-        flights.append(f)
-      }
-      return flights
+    let candidateFlights = flights(
+      within: .calendarMonths(6),
+      of: flight,
+      matching: .category(for: flight)
+    ).filter { f in
+      f.hasApproaches || f.hasHolds || f.isIPC
     }
+
+    // Filter to flights within grace period
+    let eligibleFlights = candidateFlights.filter { isWithinGracePeriod($0) }
 
     // check for IPC first
     if eligibleFlights.contains(where: \.isIPC) { return nil }
 
     // verify that there were 6a/1h within past 6mo
     let totalApproaches = eligibleFlights.reduce(0) { $0 + $1.approachCount }
-    let hold = (eligibleFlights.contains(where: \.hasHolds))
-    // you probably intercepted and tracked some radials, right??
+    let hold = eligibleFlights.contains(where: \.hasHolds)
 
     return (totalApproaches < 6 || !hold) ? .noIFRCurrency : nil
   }
 
-  func setup() async throws {
-    await withThrowingTaskGroup(of: Void.self) { group in
-      for flight in flights {
-        group.addTask {
-          if flight.isIPC {
-            await self.storeIFRCurrency(flight: flight, countsForIFRCurrency: true)
-            return
-          }
-          if !flight.hasApproaches && !flight.hasHolds {
-            await self.storeIFRCurrency(flight: flight, countsForIFRCurrency: false)
-          }
-
-          let eligibleFlights = try self.flightsWithinLast(
-            calendarMonths: 12,
-            ofFlight: flight,
-            matchingCategory: true
-          )
-          if eligibleFlights.contains(where: \.isIPC) {
-            await self.storeIFRCurrency(flight: flight, countsForIFRCurrency: true)
-            return
-          }
-          var totalApproaches = 0
-          var totalHolds: UInt = 0
-          for eligibleFlight in eligibleFlights {
-            totalApproaches +=
-              await
-              (self.flightCountsForIFRCurrency(eligibleFlight) ? eligibleFlight.approachCount : 0)
-            totalHolds +=
-              await (self.flightCountsForIFRCurrency(eligibleFlight) ? eligibleFlight.holds : 0)
-          }
-
-          await self.storeIFRCurrency(
-            flight: flight,
-            countsForIFRCurrency: (totalApproaches >= 6 && totalHolds >= 1)
-          )
-        }
+  func setup() throws {
+    // Pre-compute grace period status for all flights
+    for flight in flights {
+      if flight.isIPC {
+        countsForIFRCurrency[flight.id] = true
+        continue
       }
+      if !flight.hasApproaches && !flight.hasHolds {
+        countsForIFRCurrency[flight.id] = false
+        // Note: Don't continue - still need to check 12mo lookback
+      }
+
+      let eligibleFlights = flights(
+        within: .calendarMonths(12),
+        of: flight,
+        matching: .category(for: flight)
+      )
+
+      if eligibleFlights.contains(where: \.isIPC) {
+        countsForIFRCurrency[flight.id] = true
+        continue
+      }
+
+      let countingFlights = eligibleFlights.filter { flightCountsForIFRCurrency($0) }
+      let totalApproaches = countingFlights.reduce(0) { $0 + $1.approachCount }
+      let totalHolds = countingFlights.reduce(0 as UInt) { $0 + $1.holds }
+
+      countsForIFRCurrency[flight.id] = (totalApproaches >= 6 && totalHolds >= 1)
     }
   }
 
-  // flights with practice approaches don't count towards currency unless they
-  // are within 12 months of the preceding practice approaches or IPC
-  private func isWithinGracePeriod(_ flight: Flight) async throws -> Bool {
-    if let counts = precalculatedFlightCountsForIFRCurrency(flight) { return counts }
+  // MARK: - Private
 
-    let eligibleFlights = try await withThrowingTaskGroup(
-      of: Flight?.self,
-      returning: Array<Flight>.self
-    ) { group in
-      for f in try flightsWithinLast(calendarMonths: 12, ofFlight: flight, matchingCategory: true) {
-        group.addTask {
-          if !f.hasApproaches && !f.hasHolds && !f.isIPC { return nil }
-          return try await self.isWithinGracePeriod(f) ? f : nil
-        }
-      }
-
-      var flights = [Flight]()
-      for try await f in group {
-        if let f { flights.append(f) }
-      }
-      return flights
+  /// Checks if a flight was done while the pilot was within the IFR grace period.
+  ///
+  /// Flights with practice approaches don't count towards currency unless they
+  /// are within 12 months of preceding practice approaches or IPC.
+  private func isWithinGracePeriod(_ flight: Flight) -> Bool {
+    if let counts = countsForIFRCurrency[flight.id] {
+      return counts
     }
 
-    // check for IPC first
-    if eligibleFlights.contains(where: \.isIPC) { return false }
+    // Fallback for flights not pre-computed (shouldn't happen in normal use)
+    let eligibleFlights = flights(
+      within: .calendarMonths(12),
+      of: flight,
+      matching: .category(for: flight)
+    ).filter { f in
+      (f.hasApproaches || f.hasHolds || f.isIPC) && isWithinGracePeriod(f)
+    }
+
+    if eligibleFlights.contains(where: \.isIPC) { return true }
 
     let totalApproaches = eligibleFlights.reduce(0) { $0 + $1.approachCount }
-    let hold = (eligibleFlights.contains(where: \.hasHolds))
+    let hold = eligibleFlights.contains(where: \.hasHolds)
 
-    let counts = (totalApproaches < 6 || !hold)
-    storeIFRCurrency(flight: flight, countsForIFRCurrency: counts)
+    let counts = totalApproaches >= 6 && hold
+    countsForIFRCurrency[flight.id] = counts
     return counts
   }
 
   private func flightCountsForIFRCurrency(_ flight: Flight) -> Bool {
     return countsForIFRCurrency[flight.id] ?? false
-  }
-
-  private func precalculatedFlightCountsForIFRCurrency(_ flight: Flight) -> Bool? {
-    return countsForIFRCurrency[flight.id]
-  }
-
-  private func storeIFRCurrency(flight: Flight, countsForIFRCurrency counts: Bool) {
-    countsForIFRCurrency[flight.id] = counts
   }
 }

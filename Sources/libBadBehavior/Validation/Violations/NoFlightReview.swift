@@ -11,17 +11,21 @@
 /// - The flight review itself
 /// - A checkride (practical test)
 final class NoFlightReview: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
     if flight.isDualReceived || !flight.isPIC { return nil }
     if flight.isStudentSolo || flight.isFlightReview || flight.isCheckride { return nil }
 
-    let eligibleFlights = try flightsWithinLast(calendarMonths: 24, ofFlight: flight)
+    let eligibleFlights = flights(
+      within: .calendarMonths(24),
+      of: flight,
+      matching: .none(for: flight)
+    )
     return eligibleFlights.contains { $0.isFlightReview || $0.isCheckride } ? nil : .noFlightReview
   }
 }

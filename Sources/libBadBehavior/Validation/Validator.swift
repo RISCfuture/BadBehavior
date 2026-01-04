@@ -42,7 +42,7 @@ package actor Validator {
     DualGivenTimeInType.self
   ]
 
-  private var flights: [Flight]
+  private let flightIndex: FlightIndex
 
   // MARK: Init
 
@@ -53,7 +53,8 @@ package actor Validator {
   ///
   /// - Parameter flights: The flights to validate.
   package init(flights: [Flight]) {
-    self.flights = flights.sorted(by: { $0.date < $1.date })
+    let sortedFlights = flights.sorted(by: { $0.date < $1.date })
+    self.flightIndex = FlightIndex(flights: sortedFlights)
   }
 
   // MARK: Scanner
@@ -61,7 +62,7 @@ package actor Validator {
   /// Validates all flights and returns any violations found.
   ///
   /// Each flight is checked against all 11 violation checkers. The validation process:
-  /// 1. Initializes all checkers with the complete flight list
+  /// 1. Initializes all checkers with the flight index
   /// 2. Calls `setup()` on each checker for any expensive pre-computation
   /// 3. Checks each flight in parallel using a task group
   /// 4. Collects and returns only flights that have violations
@@ -73,10 +74,10 @@ package actor Validator {
   package func violations() async throws -> [Violations] {
     return try await withThrowingTaskGroup(of: Violations?.self, returning: Array<Violations>.self)
     { group in
-      let checkers = Self.checkers.map { $0.init(flights: flights) }
+      let checkers = Self.checkers.map { $0.init(flightIndex: flightIndex) }
       for checker in checkers { try await checker.setup() }
 
-      for flight in self.flights {
+      for flight in flightIndex.flights {
         group.addTask {
           var flightViolations = [Violation]()
           for checker in checkers {

@@ -7,17 +7,21 @@
 ///
 /// The takeoffs/landings must be in the same aircraft category.
 final class NoNVGCurrency: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
     if flight.isDualReceived || !flight.isPIC { return nil }
     if flight.takeoffsNVG == 0 || flight.landingsNVG == 0 { return nil }
 
-    let eligibleFlights = try flightsWithinLast(calendarMonths: 4, ofFlight: flight)
+    let eligibleFlights = flights(
+      within: .calendarMonths(4),
+      of: flight,
+      matching: .none(for: flight)
+    )
     let totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.takeoffsNVG }
     let totalLandings = eligibleFlights.reduce(0) { $0 + $1.landingsNVG }
     let hasProficiencyCheck = eligibleFlights.contains(where: {

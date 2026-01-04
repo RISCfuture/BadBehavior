@@ -16,10 +16,10 @@
 ///
 /// - TODO: Add ferry/test flight exclusion when custom field is available
 final class NoSICCurrency: ViolationChecker {
-  let flights: [Flight]
+  let flightIndex: FlightIndex
 
-  required init(flights: [Flight]) {
-    self.flights = flights
+  required init(flightIndex: FlightIndex) {
+    self.flightIndex = flightIndex
   }
 
   func check(flight: Flight) throws -> Violation? {
@@ -33,12 +33,10 @@ final class NoSICCurrency: ViolationChecker {
     if flight.hasPassengers { return nil }
 
     // Check for 3 takeoffs and landings in the same type within 90 days
-    let eligibleFlights = try flightsWithinLast(
-      calendarDays: 90,
-      ofFlight: flight,
-      matchingCategory: true,
-      matchingClass: true,
-      matchingTypeIfRequired: true
+    let eligibleFlights = flights(
+      within: .calendarDays(90),
+      of: flight,
+      matching: .full(for: flight)
     )
 
     let totalTakeoffs = eligibleFlights.reduce(0) { $0 + $1.totalTakeoffs }
