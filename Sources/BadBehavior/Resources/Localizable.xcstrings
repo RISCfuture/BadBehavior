@@ -17,7 +17,7 @@
         }
       }
     },
-    "%ld violations total." : {
+    "%lld violations total." : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -26,19 +26,28 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%ld violation total."
+                  "value" : "%lld violation total."
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No violations."
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%ld violations total."
+                  "state" : "translated",
+                  "value" : "%lld violations total."
                 }
               }
             }
           }
         }
       }
+    },
+    "Acted as SIC in type-rated aircraft without required takeoffs and landings [61.55(b)]" : {
+
     },
     "Carried passengers at night without having completed required takeoffs and landings [61.57(b)]" : {
 
