@@ -36,12 +36,13 @@ The Validator uses a plugin architecture with specialized checkers:
 2. **NoPassengerCurrency** - Checks FAR 61.57(a) takeoff/landing requirements
 3. **NoNightPassengerCurrency** - Checks FAR 61.57(b) night requirements
 4. **NoIFRCurrency** - Checks FAR 61.57(c) instrument currency
-5. **NoProficiencyCheck** - Checks FAR 61.58(a)(1) proficiency requirements
-6. **NoProficiencyCheckInType** - Checks FAR 61.58(a)(2) type-specific requirements
-7. **NoNVGCurrency** - Checks FAR 61.57(f) NVG currency
-8. **NoNVGPassengerCurrency** - Checks FAR 61.57(f) NVG passenger currency
-9. **DualGiven8In24** - Checks FAR 61.195(a) CFI time limits
-10. **DualGivenTimeInType** - Checks FAR 61.195(f) CFI type experience
+5. **NoSICCurrency** - Checks FAR 61.55(b) SIC currency for type-rated aircraft
+6. **NoProficiencyCheck** - Checks FAR 61.58(a)(1) proficiency requirements
+7. **NoProficiencyCheckInType** - Checks FAR 61.58(a)(2) type-specific requirements
+8. **NoNVGCurrency** - Checks FAR 61.57(f) NVG currency
+9. **NoNVGPassengerCurrency** - Checks FAR 61.57(f) NVG passenger currency
+10. **DualGiven8In24** - Checks FAR 61.195(a) CFI time limits
+11. **DualGivenTimeInType** - Checks FAR 61.195(f) CFI type experience
 
 Each checker runs in parallel across all flights for maximum performance.
 

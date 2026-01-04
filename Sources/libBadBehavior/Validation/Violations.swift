@@ -64,6 +64,13 @@ package enum Violation: Codable, Sendable {
   /// To give training in a multiengine airplane, helicopter, or powered-lift aircraft,
   /// the instructor must have at least 5 flight hours as PIC in the specific make and model.
   case dualGivenTimeInType
+
+  /// SIC operations without required currency per FAR 61.55(b).
+  ///
+  /// To act as SIC in an aircraft requiring a type rating, the pilot must have made
+  /// at least 3 takeoffs and landings within the preceding 90 days in the same type.
+  /// This applies only when no passengers are aboard.
+  case noSICCurrency
 }
 
 /// A container for a flight and its associated violations.

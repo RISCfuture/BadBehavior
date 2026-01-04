@@ -17,6 +17,7 @@ final class CNFlight: NSManagedObject {
   @NSManaged var flight_toPlace: CNPlace?
 
   @NSManaged var flight_pic: NSNumber?
+  @NSManaged var flight_sic: NSNumber?
   @NSManaged var flight_solo: NSNumber?
   @NSManaged var flight_night: NSNumber?
   @NSManaged var flight_dualReceived: NSNumber?

@@ -189,6 +189,11 @@ struct BadBehavior: AsyncParsableCommand {
           localized:
             "Gave training in a multi-engine, helicopter, or powered-lift aircraft without having 5 hours in type [61.195(f)]"
         )
+      case .noSICCurrency:
+        return String(
+          localized:
+            "Acted as SIC in type-rated aircraft without required takeoffs and landings [61.55(b)]"
+        )
     }
   }
 }

@@ -52,6 +52,9 @@ package struct Flight: IdentifiableRecord {
   /// Pilot-in-command time logged, in minutes.
   package let PICTime: UInt
 
+  /// Second-in-command time logged, in minutes.
+  package let SICTime: UInt
+
   /// Night flight time logged, in minutes.
   package let nightTime: UInt
 
@@ -135,6 +138,9 @@ package struct Flight: IdentifiableRecord {
   /// Whether PIC time was logged.
   package var isPIC: Bool { PICTime > 0 }
 
+  /// Whether SIC time was logged.
+  package var isSIC: Bool { SICTime > 0 }
+
   /// Whether dual instruction was received.
   package var isDualReceived: Bool { dualReceivedTime > 0 }
 
@@ -161,6 +167,9 @@ package struct Flight: IdentifiableRecord {
 
   /// PIC time in hours.
   package var PICHours: Double { Double(PICTime) / 60.0 }
+
+  /// SIC time in hours.
+  package var SICHours: Double { Double(SICTime) / 60.0 }
 
   /// Night time in hours.
   package var nightHours: Double { Double(nightTime) / 60.0 }
@@ -208,6 +217,7 @@ package struct Flight: IdentifiableRecord {
     to = .init(place: flight.flight_toPlace)
 
     PICTime = flight.flight_pic?.uintValue ?? 0
+    SICTime = flight.flight_sic?.uintValue ?? 0
     soloTime = flight.flight_solo?.uintValue ?? 0
     nightTime = flight.flight_night?.uintValue ?? 0
     dualGivenTime = flight.flight_dualGiven?.uintValue ?? 0

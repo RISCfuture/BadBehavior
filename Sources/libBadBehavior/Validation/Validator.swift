@@ -20,6 +20,7 @@ import Foundation
 /// - **FAR 61.57(a)**: Passenger currency (takeoffs/landings in 90 days)
 /// - **FAR 61.57(b)**: Night passenger currency
 /// - **FAR 61.57(c)**: IFR currency (6 approaches + hold in 6 months)
+/// - **FAR 61.55(b)**: SIC currency for type-rated aircraft
 /// - **FAR 61.57(f)**: NVG currency and passenger currency
 /// - **FAR 61.58**: Proficiency checks for type-rated aircraft
 /// - **FAR 61.195(a)**: CFI 8-hour daily limit
@@ -32,6 +33,7 @@ package actor Validator {
     NoPassengerCurrency.self,
     NoNightPassengerCurrency.self,
     NoIFRCurrency.self,
+    NoSICCurrency.self,
     NoProficiencyCheck.self,
     NoProficiencyCheckInType.self,
     NoNVGCurrency.self,
@@ -58,7 +60,7 @@ package actor Validator {
 
   /// Validates all flights and returns any violations found.
   ///
-  /// Each flight is checked against all 10 violation checkers. The validation process:
+  /// Each flight is checked against all 11 violation checkers. The validation process:
   /// 1. Initializes all checkers with the complete flight list
   /// 2. Calls `setup()` on each checker for any expensive pre-computation
   /// 3. Checks each flight in parallel using a task group

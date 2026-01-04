@@ -4,7 +4,7 @@ A comprehensive guide to the FAR violations detected by BadBehavior.
 
 ## Overview
 
-BadBehavior checks for ten different types of regulatory violations related to pilot currency and instructor limitations.
+BadBehavior checks for eleven different types of regulatory violations related to pilot currency and instructor limitations.
 
 ## Flight Review Currency
 
@@ -35,6 +35,18 @@ To carry passengers at night, a pilot must have made 3 takeoffs and full-stop la
 - Flight has night time
 - Flight has passengers
 - Insufficient night takeoffs/full-stop landings in category/class
+
+## SIC Currency
+
+### noSICCurrency - FAR 61.55(b)
+
+To serve as second in command of an aircraft type certificated for more than one required pilot flight crewmember (or in operations requiring an SIC), a pilot must have completed within the preceding 12 calendar months:
+- 3 takeoffs and landings in the aircraft type
+
+**Triggering conditions:**
+- Flight logged as SIC
+- Aircraft requires type rating
+- Insufficient takeoffs/landings in type within prior 12 calendar months
 
 ## Instrument Currency
 
@@ -95,6 +107,8 @@ for v in violations {
             print("FAR 61.57(a) - Complete 3 takeoffs/landings")
         case .noNightPassengerCurrency:
             print("FAR 61.57(b) - Complete 3 night takeoffs/full-stops")
+        case .noSICCurrency:
+            print("FAR 61.55(b) - Complete 3 takeoffs/landings in type")
         case .noIFRCurrency:
             print("FAR 61.57(c) - Complete IPC or 6 approaches + hold")
         case .noPPC:
