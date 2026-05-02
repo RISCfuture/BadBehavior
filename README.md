@@ -1,5 +1,9 @@
 # Bad Behavior
 
+[![CI](https://github.com/RISCfuture/BadBehavior/actions/workflows/swift.yaml/badge.svg)](https://github.com/RISCfuture/BadBehavior/actions/workflows/swift.yaml)
+[![Documentation](https://github.com/RISCfuture/BadBehavior/actions/workflows/documentation.yaml/badge.svg)](https://riscfuture.github.io/BadBehavior/)
+[![License: Public Domain](https://img.shields.io/badge/license-public%20domain-blue.svg)](LICENSE)
+
 This Swift executable scans your LogTen for Mac logbook, looking for any flights
 that may have been contrary to FAR part 91 regulations. In particular, it
 attempts to locate the following flights:
