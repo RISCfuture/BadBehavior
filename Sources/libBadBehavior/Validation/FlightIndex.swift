@@ -135,30 +135,4 @@ struct FlightIndex: Sendable {
     return Array(flights[0..<endIndex])
   }
 
-  /// Returns flights within a time window, including the reference flight if it matches.
-  ///
-  /// Unlike `flights(within:of:matching:)`, this method does not exclude the
-  /// reference flight. Useful for queries where the reference flight should be
-  /// considered (e.g., calculating totals that include the current flight).
-  ///
-  /// - Parameters:
-  ///   - window: The time window to look back.
-  ///   - flight: The reference flight for the time window.
-  ///   - criteria: Aircraft matching criteria.
-  /// - Returns: All flights in the window matching criteria, including the reference.
-  func flightsIncludingSelf(
-    within window: TimeWindow,
-    of flight: Flight,
-    matching criteria: FlightMatchCriteria
-  ) -> [Flight] {
-    let startDate = window.startDate(from: flight.date)
-    let startIndex = lowerBound(for: startDate)
-    let endIndex = upperBound(for: flight.date)
-
-    guard startIndex < endIndex else { return [] }
-
-    return flights[startIndex..<endIndex].filter { candidate in
-      criteria.matches(candidate)
-    }
-  }
 }

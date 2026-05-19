@@ -57,26 +57,4 @@ extension Reader {
       default: preconditionFailure("Unknown custom attribute \(property.logTenProperty_key)")
     }
   }
-
-  private static func aircraftCustomAttribute(for title: String, context: NSManagedObjectContext)
-    throws
-    -> KeyPath<CNAircraft, Bool>
-  {
-    let request = CNLogTenCustomizationProperty.fetchRequest(
-      title: title,
-      keyPrefix: "aircraft_customAttribute"
-    )
-    let result = try context.fetch(request)
-    guard result.count == 1, let property = result.first else {
-      throw Errors.missingProperty(title, model: "Aircraft")
-    }
-    switch property.logTenProperty_key {
-      case "aircraft_customAttribute1": return \.aircraft_customAttribute1
-      case "aircraft_customAttribute2": return \.aircraft_customAttribute2
-      case "aircraft_customAttribute3": return \.aircraft_customAttribute3
-      case "aircraft_customAttribute4": return \.aircraft_customAttribute4
-      case "aircraft_customAttribute5": return \.aircraft_customAttribute5
-      default: preconditionFailure("Unknown custom attribute \(property.logTenProperty_key)")
-    }
-  }
 }
