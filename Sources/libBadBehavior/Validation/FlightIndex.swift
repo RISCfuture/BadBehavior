@@ -134,5 +134,4 @@ struct FlightIndex: Sendable {
     guard endIndex > 0 else { return [] }
     return Array(flights[0..<endIndex])
   }
-
 }
