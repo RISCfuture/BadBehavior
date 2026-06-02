@@ -24,7 +24,8 @@ final class CNAircraft: NSManagedObject {
   static func fetchRequest() -> NSFetchRequest<CNAircraft> {
     let request = NSFetchRequest<CNAircraft>(entityName: "Aircraft")
     request.sortDescriptors = [
-      .init(keyPath: \CNAircraft.aircraft_aircraftID, ascending: true)  // swiftlint:disable:this prefer_self_in_static_references
+      // swiftlint:disable:next prefer_self_in_static_references
+      .init(keyPath: \CNAircraft.aircraft_aircraftID, ascending: true)
     ]
     request.includesSubentities = true
     return request
