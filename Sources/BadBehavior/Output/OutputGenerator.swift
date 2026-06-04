@@ -3,6 +3,7 @@ import libBadBehavior
 
 /// Protocol for generating violation report output.
 protocol OutputGenerator {
+  // periphery:ignore - protocol requirement; both conformers read it (Text/JSONOutputGenerator), but Periphery doesn't link the witness reads to the requirement
   /// The output stream for the violation report.
   var outputStream: any TextOutputStream { get set }
 

@@ -165,30 +165,6 @@ package struct Flight: IdentifiableRecord {
   /// Whether the aircraft is a tailwheel airplane.
   package var isTailwheel: Bool { aircraft?.tailwheel == true }
 
-  /// PIC time in hours.
-  package var PICHours: Double { Double(PICTime) / 60.0 }
-
-  /// SIC time in hours.
-  package var SICHours: Double { Double(SICTime) / 60.0 }
-
-  /// Night time in hours.
-  package var nightHours: Double { Double(nightTime) / 60.0 }
-
-  /// Actual instrument time in hours.
-  package var actualInstrumentHours: Double { Double(actualInstrumentTime) / 60.0 }
-
-  /// Dual given time in hours.
-  package var dualGivenHours: Double { Double(dualGivenTime) / 60.0 }
-
-  /// Dual received time in hours.
-  package var dualReceivedHours: Double { Double(dualReceivedTime) / 60.0 }
-
-  /// Solo time in hours.
-  package var soloHours: Double { Double(soloTime) / 60.0 }
-
-  /// NVG time in hours.
-  package var NVGHours: Double { Double(NVGTime) / 60.0 }
-
   // MARK: Initializers
 
   init(

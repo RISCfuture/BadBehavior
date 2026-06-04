@@ -28,16 +28,4 @@ final class CNFlightCrew: NSManagedObject {
   @NSManaged var flightCrew_custom8: CNPerson?
   @NSManaged var flightCrew_custom9: CNPerson?
   @NSManaged var flightCrew_custom10: CNPerson?
-
-  // MARK: Computed Properties
-
-  var flightAttendants: [CNPerson] {
-    [
-      flightCrew_purser,
-      flightCrew_flightAttendant1,
-      flightCrew_flightAttendant2,
-      flightCrew_flightAttendant3,
-      flightCrew_flightAttendant4
-    ].compactMap(\.self)
-  }
 }
