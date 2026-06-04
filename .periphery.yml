@@ -1,1 +1,9 @@
 retain_public: true
+# Codable JSON wire-format DTO properties (JSONOutputGenerator), coherent-complete
+# Local Record `package let` fields (Approach/Flight/Person/Place), and Core Data-backed
+# assign-only properties are written for the wire/record shape but not all read back.
+retain_assign_only_properties: true
+# @objc(...)/@NSManaged Core Data entities and their relationships/attributes are
+# accessed by the Core Data runtime and via key paths / predicate format strings that
+# Periphery cannot see.
+retain_objc_accessible: true
