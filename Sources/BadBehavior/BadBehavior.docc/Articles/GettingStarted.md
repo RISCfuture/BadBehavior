@@ -9,6 +9,7 @@ libBadBehavior is a Swift library that reads your LogTen Pro for Mac logbook and
 ## Prerequisites
 
 Before using libBadBehavior, ensure you have:
+
 - macOS 13 or later
 - LogTen Pro for Mac installed with your logbook data
 - Swift 6.0 or later
@@ -18,16 +19,19 @@ Before using libBadBehavior, ensure you have:
 Your LogTen Pro installation requires specific custom fields:
 
 #### Flight Custom Fields
+
 - **Night Full Stops** (Custom Landings) - For tracking night currency
 - **FAR 61.58** (Custom Notes) - For marking proficiency check flights
 - **Checkride** (Custom Notes) - For marking checkride flights
 - **FAR 61.31(k)** (Custom Notes) - For NVG proficiency checks
 
 #### Flight Crew Custom Roles
+
 - **Safety Pilot** (Custom Role)
 - **Examiner** (Custom Role)
 
 #### Aircraft Type Custom Fields
+
 - **Type Code** - FAA type designator
 - **Sim Type** - BATD, AATD, FTD, or FFS
 - **Sim A/C Cat** - ASEL, ASES, AMEL, AMES, or GL

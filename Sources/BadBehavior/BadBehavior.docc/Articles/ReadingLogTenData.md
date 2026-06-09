@@ -38,6 +38,7 @@ let flights = try await reader.read()
 ```
 
 This returns an array of `Flight` objects, each containing:
+
 - Flight date and times
 - Aircraft information
 - Crew members and passengers
@@ -49,7 +50,7 @@ This returns an array of `Flight` objects, each containing:
 
 The Reader automatically resolves relationships between entities:
 
-```
+```text
 Flight
   |-- Aircraft
   |     +-- AircraftType
@@ -63,6 +64,7 @@ Flight
 ## Error Handling
 
 The Reader may throw `Errors` if:
+
 - The Core Data store cannot be opened
 - Required custom fields are missing
 - The LogTen version is incompatible
