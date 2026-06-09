@@ -13,6 +13,7 @@ BadBehavior checks for eleven different types of regulatory violations related t
 A pilot may not act as pilot in command unless they have completed a flight review within the preceding 24 calendar months.
 
 **Triggering conditions:**
+
 - Flight logged as PIC
 - Not dual received, student solo, flight review, or checkride
 - No flight review or checkride within prior 24 calendar months
@@ -24,6 +25,7 @@ A pilot may not act as pilot in command unless they have completed a flight revi
 To carry passengers, a pilot must have made 3 takeoffs and landings within the preceding 90 days in the same category and class.
 
 **Additional requirements:**
+
 - Tailwheel aircraft require full-stop landings
 - Type-rated aircraft require landings in type
 
@@ -32,6 +34,7 @@ To carry passengers, a pilot must have made 3 takeoffs and landings within the p
 To carry passengers at night, a pilot must have made 3 takeoffs and full-stop landings at night within the preceding 90 days.
 
 **Triggering conditions:**
+
 - Flight has night time
 - Flight has passengers
 - Insufficient night takeoffs/full-stop landings in category/class
@@ -41,9 +44,11 @@ To carry passengers at night, a pilot must have made 3 takeoffs and full-stop la
 ### noSICCurrency - FAR 61.55(b)
 
 To serve as second in command of an aircraft type certificated for more than one required pilot flight crewmember (or in operations requiring an SIC), a pilot must have completed within the preceding 12 calendar months:
+
 - 3 takeoffs and landings in the aircraft type
 
 **Triggering conditions:**
+
 - Flight logged as SIC
 - Aircraft requires type rating
 - Insufficient takeoffs/landings in type within prior 12 calendar months
@@ -53,6 +58,7 @@ To serve as second in command of an aircraft type certificated for more than one
 ### noIFRCurrency - FAR 61.57(c)
 
 To fly under IFR, a pilot must have completed within the preceding 6 calendar months:
+
 - Six instrument approaches
 - Holding procedures
 - Intercepting and tracking courses
@@ -74,12 +80,14 @@ The proficiency check must be in the same type of aircraft (or approved simulato
 ### noNVGCurrency - FAR 61.57(f)
 
 To act as PIC using NVGs, pilots must have completed within the preceding 4 calendar months:
+
 - 3 NVG takeoffs and landings
 - OR a proficiency check
 
 ### noNVGPassengerCurrency - FAR 61.57(f)
 
 Additional requirements apply when carrying passengers under NVGs:
+
 - 3 NVG takeoffs and landings within preceding 2 calendar months
 - OR a proficiency check
 

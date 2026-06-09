@@ -36,41 +36,41 @@ take you 95% of the way there. In particular:
 
 ### LogTen Pro: Flights
 
-- LogTen Pro does not have a "night full-stop landings" field by default. You
+* LogTen Pro does not have a "night full-stop landings" field by default. You
   will need a "Custom Landings" field named "Night Full Stops". (If you are not
   recording night full-stop landings, then how are you tracking night currency?)
-- LogTen Pro does not have a "checkride" Boolean field. You will need a
+* LogTen Pro does not have a "checkride" Boolean field. You will need a
   "Custom Notes" field named "Checkride". Flights with any non-empty value in
   this field will be considered checkrides.
-- LogTen Pro does not have a field for indicating FAR 61.58 recurrent flights.
+* LogTen Pro does not have a field for indicating FAR 61.58 recurrent flights.
   You will need a "Custom Notes" field named "FAR 61.58". Flights with any
   non-empty value in this field will be considered recurrent checkrides.
-- LogTen Pro does not have a field for indicating FAR 61.31(k) NVG proficiency
+* LogTen Pro does not have a field for indicating FAR 61.31(k) NVG proficiency
   check flights. You will need a "Custom Notes" field named "FAR 61.31(k)".
   Flights with any non-empty value in this field will be considered NVG
   proficiency check flights.
-- LogTen Pro does not have a "safety pilot" or "examiner" role. You must have
+* LogTen Pro does not have a "safety pilot" or "examiner" role. You must have
   "Custom Role" fields titled "Safety Pilot" and "Examiner".
 
 ### LogTen Pro: Aircraft and aircraft types
 
-- This script will not work if you have modified or rearranged your engine
+* This script will not work if you have modified or rearranged your engine
   types, aircraft categories, or aircraft classes.
-- LogTen Pro only has "jet" and "turbofan" engine types. The "jet" type is
+* LogTen Pro only has "jet" and "turbofan" engine types. The "jet" type is
   assumed to mean "turbojet".
-- The "aircraft type" field in my logbook does not conform to FAA aircraft
+* The "aircraft type" field in my logbook does not conform to FAA aircraft
   types. For example, I have "C-172SP" as a type instead of "C172". I use a
   custom Aircraft Type field called "Type Code". If you also have such a field,
   it will use the value from that field; otherwise, it will use the normal
   aircraft type.
-- This script requires more simulator information than LogTen Pro is set up for
+* This script requires more simulator information than LogTen Pro is set up for
   by default. To provide this info, you will need to modify Aircraft Type to
   include:
-  - a custom field called "Sim Type" whose values can be "BATD", "AATD", "FTD",
+  * a custom field called "Sim Type" whose values can be "BATD", "AATD", "FTD",
     or "FFS" (or blank for aircraft);
-  - a custom field called "Type Code" whose value is the type code for the
+  * a custom field called "Type Code" whose value is the type code for the
     aircraft being simulated (FFS and FTD only); and
-  - a custom field called "Sim A/C Cat" whose value is the category and class
+  * a custom field called "Sim A/C Cat" whose value is the category and class
     for the aircraft being simulated (FTD and FFS only, values can be "ASEL",
     "ASES", "AMEL", "AMES", or "GL" for glider).
 
@@ -119,7 +119,7 @@ negatives:
   mark that flight as non-compliant.
 * Instrument currency as defined in 61.57(c) requires six approaches, a hold,
   and "intercepting and tracking courses". There is no way to log that last
-  part, but since it can be reasonably assumed that any instrument flight 
+  part, but since it can be reasonably assumed that any instrument flight
   involving approaches or holds by definition involves intercepting and tracking
   courses, it's simply assumed to always be true.
 * The NVG currency checks only validate whether NVG takeoffs and landings are

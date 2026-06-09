@@ -25,6 +25,7 @@ let violations = try await validator.violations()
 ```
 
 This returns an array of `Violations` objects, each containing:
+
 - The flight that has violations
 - An array of `Violation` cases describing each issue
 
@@ -69,6 +70,7 @@ for v in violations {
 ## Concurrency Model
 
 The Validator is an actor to ensure thread-safe operation. The validation process:
+
 1. Sets up each checker with the complete flight list
 2. Iterates through flights, checking each against all rules
 3. Collects violations using Swift Concurrency task groups

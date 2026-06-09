@@ -11,6 +11,7 @@ A command-line tool and library for scanning your LogTen Pro logbook for FAR Par
 BadBehavior reads your LogTen Pro for Mac logbook and identifies flights that may have violated FAR Part 61 and 91 regulations.
 
 The tool checks for violations of:
+
 - **FAR 61.56(c)** - Flight review currency
 - **FAR 61.57(a)** - Passenger currency (takeoffs/landings)
 - **FAR 61.57(b)** - Night passenger currency
