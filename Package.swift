@@ -2,6 +2,11 @@
 
 import PackageDescription
 
+let approachableConcurrency: [SwiftSetting] = [
+  .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+  .enableUpcomingFeature("InferIsolatedConformances")
+]
+
 let package = Package(
   name: "BadBehavior",
   defaultLocalization: "en",
@@ -13,7 +18,8 @@ let package = Package(
   targets: [
     .target(
       name: "libBadBehavior",
-      resources: [.process("Resources")]
+      resources: [.process("Resources")],
+      swiftSettings: approachableConcurrency
     ),
     .executableTarget(
       name: "BadBehavior",
@@ -21,7 +27,8 @@ let package = Package(
         "libBadBehavior",
         .product(name: "ArgumentParser", package: "swift-argument-parser")
       ],
-      resources: [.process("Resources")]
+      resources: [.process("Resources")],
+      swiftSettings: approachableConcurrency
     )
   ],
   swiftLanguageModes: [.v6]
