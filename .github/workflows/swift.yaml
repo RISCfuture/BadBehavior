@@ -46,3 +46,23 @@ jobs:
           wget -O .swift-format https://gist.githubusercontent.com/RISCfuture/e0c21afb7bd80a88d128a42bf40d2ecd/raw/.swift-format
       - name: Run swift-format lint
         run: swift format lint --strict -r .
+  documentation:
+    name: Build Documentation
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v6
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "26.4"
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.3"
+      - name: Build Documentation
+        run: |
+          swift package --allow-writing-to-directory "$RUNNER_TEMP/docs" \
+            generate-documentation \
+            --target BadBehavior \
+            --target libBadBehavior \
+            --enable-experimental-combined-documentation \
+            --warnings-as-errors \
+            --output-path "$RUNNER_TEMP/docs"
