@@ -27,7 +27,7 @@ enum OutputFormat: String, ExpressibleByArgument, CaseIterable {
 ///
 /// ## Usage
 ///
-/// Run without arguments to scan the default LogTen Pro installation:
+/// Run without arguments to scan the LogTen Pro logbook found on this Mac:
 /// ```
 /// BadBehavior
 /// ```
@@ -62,13 +62,14 @@ struct BadBehavior: AsyncParsableCommand {
       """
   )
 
-  private static let logtenDataStorePath =
-    "Library/Group Containers/group.com.coradine.LogTenPro/LogTenProData_6583aa561ec1cc91302449b5/LogTenCoreDataStore.sql"
+  private static let logtenGroupContainerPath =
+    "Library/Group Containers/group.com.coradine.LogTenPro"
+  private static let dataDirectoryPrefix = "LogTenProData_"
+  private static let dataStoreFilename = "LogTenCoreDataStore.sql"
   private static let managedObjectModelPath = "LogTen.app/Contents/Resources/CNLogBookDocument.momd"
 
-  private static var logtenDataStoreURL: URL {
-    let homeDir = FileManager.default.homeDirectoryForCurrentUser
-    return homeDir.appendingPathComponent(logtenDataStorePath)
+  private static var logtenGroupContainerURL: URL {
+    FileManager.default.homeDirectoryForCurrentUser.appending(path: logtenGroupContainerPath)
   }
 
   private static var managedObjectModelURL: URL {
@@ -79,14 +80,15 @@ struct BadBehavior: AsyncParsableCommand {
 
   /// Path to the LogTen Pro SQLite database file.
   ///
-  /// The default path is the standard LogTen Pro installation location:
-  /// `~/Library/Group Containers/group.com.coradine.LogTenPro/.../LogTenCoreDataStore.sql`
+  /// When not given, the logbook is located by searching
+  /// `~/Library/Group Containers/group.com.coradine.LogTenPro` for the most recently
+  /// modified `LogTenCoreDataStore.sql`.
   @Option(
     help: "The LogTenCoreDataStore.sql file containing the logbook entries.",
     completion: .file(extensions: ["sql"]),
     transform: { .init(filePath: $0, directoryHint: .notDirectory) }
   )
-  var logtenFile = Self.logtenDataStoreURL
+  var logtenFile: URL?
 
   /// Path to the LogTen Pro Core Data managed object model.
   ///
@@ -105,6 +107,38 @@ struct BadBehavior: AsyncParsableCommand {
   @Option(help: "Output format: text or json.")
   var format: OutputFormat = .text
 
+  // MARK: Locating the logbook
+
+  /// LogTen Pro suffixes its data directory with an installation-specific
+  /// identifier, so the logbook is located by searching the group container
+  /// rather than by assuming a fixed path.
+  private static func locateDataStore() throws -> URL {
+    guard let dataStore = dataStoresByRecency().first else {
+      throw Errors.couldntFindDataStore(directory: logtenGroupContainerURL)
+    }
+    return dataStore
+  }
+
+  private static func dataStoresByRecency() -> [URL] {
+    let dataDirectories =
+      (try? FileManager.default.contentsOfDirectory(
+        at: logtenGroupContainerURL,
+        includingPropertiesForKeys: nil
+      )) ?? []
+
+    return
+      dataDirectories
+      .filter { $0.lastPathComponent.hasPrefix(dataDirectoryPrefix) }
+      .map { $0.appending(path: dataStoreFilename) }
+      .filter { FileManager.default.fileExists(atPath: $0.path(percentEncoded: false)) }
+      .sorted { modificationDate(of: $0) > modificationDate(of: $1) }
+  }
+
+  private static func modificationDate(of url: URL) -> Date {
+    (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate)
+      ?? .distantPast
+  }
+
   // MARK: Main
 
   /// Executes the violation scan.
@@ -117,7 +151,8 @@ struct BadBehavior: AsyncParsableCommand {
     let outputGenerator = format.generator
     outputGenerator.printProcessingMessage()
 
-    let reader = try await Reader(storeURL: logtenFile, modelURL: logtenManagedObjectModel)
+    let storeURL = try logtenFile ?? Self.locateDataStore()
+    let reader = try await Reader(storeURL: storeURL, modelURL: logtenManagedObjectModel)
 
     let flights = try await reader.read()
     let validator = Validator(flights: flights)

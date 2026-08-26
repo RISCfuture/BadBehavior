@@ -13,6 +13,15 @@ package enum Errors: Swift.Error {
   /// - Parameter path: The URL of the database file that could not be opened.
   case couldntCreateStore(path: URL)
 
+  /// No LogTen Pro logbook database could be found.
+  ///
+  /// LogTen Pro stores its logbook in a directory whose name ends with an
+  /// installation-specific identifier. This error occurs when no such directory
+  /// containing a logbook database exists.
+  ///
+  /// - Parameter directory: The LogTen Pro group container that was searched.
+  case couldntFindDataStore(directory: URL)
+
   /// A required custom property is missing from the LogTen Pro configuration.
   ///
   /// LogTen Pro allows custom fields to be added to various record types. This error
@@ -55,6 +64,9 @@ extension Errors: LocalizedError {
     switch self {
       case .couldntCreateStore(let path):
         return String(localized: "Couldn’t create Core Data store for “\(path.lastPathComponent)”")
+      case .couldntFindDataStore(let directory):
+        let path = directory.path(percentEncoded: false)
+        return String(localized: "Couldn’t find a LogTen Pro logbook in “\(path)”")
       case .missingProperty:
         return String(localized: "A required property is missing")
       case .invalidClass:
@@ -71,6 +83,10 @@ extension Errors: LocalizedError {
       case .couldntCreateStore:
         return String(
           localized: "The LogTen Pro data either doesn’t exist, is invalid, or is a newer version."
+        )
+      case .couldntFindDataStore:
+        return String(
+          localized: "No LogTen Pro data directory containing a logbook database was found."
         )
       case let .missingProperty(property, model):
         return String(localized: "\(model) must have a property named “\(property)”.")
@@ -92,6 +108,11 @@ extension Errors: LocalizedError {
         return String(
           localized:
             "Install LogTen Pro if it is not installed, or check that its version is compatible with this tool."
+        )
+      case .couldntFindDataStore:
+        return String(
+          localized:
+            "Install LogTen Pro and create a logbook if you haven’t already, or give the logbook location explicitly."
         )
       case let .missingProperty(property, model):
         return String(localized: "Add a property called “\(property)” to \(model).")

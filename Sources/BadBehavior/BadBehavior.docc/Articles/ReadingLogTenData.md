@@ -23,8 +23,12 @@ The Reader opens the database in read-only mode, ensuring your logbook data is n
 
 LogTen Pro stores its data at predictable locations:
 
-- **Database file:**
-  `~/Library/Group Containers/group.com.coradine.LogTenPro/LogTenProData_.../LogTenCoreDataStore.sql`
+- **Database file:** `LogTenCoreDataStore.sql`, inside a directory
+  named `LogTenProData_` plus an installation-specific identifier, within
+  `~/Library/Group Containers/group.com.coradine.LogTenPro`. Because that
+  identifier differs on every Mac, the command-line tool searches the group
+  container for the most recently modified logbook instead of assuming a
+  fixed path.
 
 - **Managed object model:**
   `/Applications/LogTen.app/Contents/Resources/CNLogBookDocument.momd`

@@ -59,11 +59,19 @@ Here's a minimal example that reads your logbook and checks for violations:
 ```swift
 import libBadBehavior
 
-// Default LogTen Pro paths
-let homeDir = FileManager.default.homeDirectoryForCurrentUser
-let storeURL = homeDir.appendingPathComponent(
-    "Library/Group Containers/group.com.coradine.LogTenPro/LogTenProData_.../LogTenCoreDataStore.sql"
+// LogTen Pro names its data directory with an installation-specific suffix,
+// so locate the logbook by searching the group container.
+let groupContainerURL = FileManager.default.homeDirectoryForCurrentUser.appending(
+    path: "Library/Group Containers/group.com.coradine.LogTenPro"
 )
+let dataDirectories = try FileManager.default.contentsOfDirectory(
+    at: groupContainerURL,
+    includingPropertiesForKeys: nil
+)
+guard let dataDirectory = dataDirectories.first(where: {
+    $0.lastPathComponent.hasPrefix("LogTenProData_")
+}) else { return }
+let storeURL = dataDirectory.appending(path: "LogTenCoreDataStore.sql")
 let modelURL = URL.applicationDirectory.appending(
     path: "LogTen.app/Contents/Resources/CNLogBookDocument.momd"
 )

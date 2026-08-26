@@ -44,8 +44,9 @@ package final class Reader {
   /// The database is never modified by this reader.
   ///
   /// - Parameters:
-  ///   - storeURL: The URL to the `LogTenCoreDataStore.sql` file. The default location is
-  ///     `~/Library/Group Containers/group.com.coradine.LogTenPro/LogTenProData_.../LogTenCoreDataStore.sql`
+  ///   - storeURL: The URL to the `LogTenCoreDataStore.sql` file. It lives inside a directory
+  ///     named `LogTenProData_` plus an installation-specific identifier, within
+  ///     `~/Library/Group Containers/group.com.coradine.LogTenPro`
   ///   - modelURL: The URL to the `CNLogBookDocument.momd` directory containing the Core Data
   ///     managed object model. The default location is
   ///     `/Applications/LogTen.app/Contents/Resources/CNLogBookDocument.momd`

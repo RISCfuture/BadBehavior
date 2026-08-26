@@ -55,6 +55,9 @@
     "Couldn’t create Core Data store for “%@”" : {
 
     },
+    "Couldn’t find a LogTen Pro logbook in “%@”" : {
+
+    },
     "Free Balloon" : {
 
     },
@@ -65,6 +68,9 @@
 
     },
     "Helicopter" : {
+
+    },
+    "Install LogTen Pro and create a logbook if you haven’t already, or give the logbook location explicitly." : {
 
     },
     "Install LogTen Pro if it is not installed, or check that its version is compatible with this tool." : {
@@ -86,6 +92,9 @@
 
     },
     "Multi-Engine Sea" : {
+
+    },
+    "No LogTen Pro data directory containing a logbook database was found." : {
 
     },
     "Other" : {
