@@ -1,3 +1,5 @@
+import Foundation
+
 /// An instrument approach procedure record from a flight.
 ///
 /// `Approach` represents an instrument approach flown during a flight. Approaches are

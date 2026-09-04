@@ -28,7 +28,7 @@ import Foundation
 package actor Validator {
   // MARK: Fields
 
-  private static let checkers: [ViolationChecker.Type] = [
+  private static let checkers: [any ViolationChecker.Type] = [
     NoFlightReview.self,
     NoPassengerCurrency.self,
     NoNightPassengerCurrency.self,

@@ -1,3 +1,5 @@
+import Foundation
+
 /// The type specification for an aircraft.
 ///
 /// `AircraftType` describes the category, class, and engine type of an aircraft. For simulators

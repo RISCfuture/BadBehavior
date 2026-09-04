@@ -1,3 +1,5 @@
+import Foundation
+
 /// An aircraft from the LogTen Pro logbook.
 ///
 /// `Aircraft` represents a specific aircraft identified by its registration (tail number).
