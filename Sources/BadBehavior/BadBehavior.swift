@@ -11,7 +11,7 @@ enum OutputFormat: String, ExpressibleByArgument, CaseIterable {
   case json
 
   /// Returns the appropriate output generator for this format.
-  var generator: OutputGenerator {
+  var generator: any OutputGenerator {
     switch self {
       case .text: TextOutputGenerator()
       case .json: JSONOutputGenerator()

@@ -1,4 +1,5 @@
-import Foundation
+import CoreData
+package import Foundation
 
 /// A flight record from the LogTen Pro logbook.
 ///

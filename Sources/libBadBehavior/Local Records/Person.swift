@@ -1,4 +1,5 @@
-import Foundation
+import CoreData
+package import Foundation
 
 /// A person record from the LogTen Pro logbook.
 ///

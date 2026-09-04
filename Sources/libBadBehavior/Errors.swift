@@ -1,4 +1,4 @@
-import Foundation
+package import Foundation
 
 /// Errors that can occur when reading LogTen Pro data or processing flight records.
 ///

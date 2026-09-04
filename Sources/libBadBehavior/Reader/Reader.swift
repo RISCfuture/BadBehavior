@@ -1,5 +1,5 @@
 import CoreData
-import Foundation
+package import Foundation
 
 /// Reads flight data from a LogTen Pro for Mac Core Data store.
 ///
