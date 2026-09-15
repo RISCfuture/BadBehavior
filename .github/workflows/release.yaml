@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Release
+    runs-on: xcode-27
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+      - name: Build
+        run: swift build -c release --product BadBehavior
+      - name: Package
+        run: |
+          tar -czf "BadBehavior-${GITHUB_REF_NAME}-macos-arm64.tar.gz" \
+            -C .build/release BadBehavior
+      - name: Extract release notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            BEGIN { gsub(/\./, "\\.", v) }
+            $0 ~ "^## \\[" v "\\]" { p = 1; next }
+            p && /^## \[/ { exit }
+            p && /^\[[^]]+\]:/ { exit }
+            p { print }
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "::error::CHANGELOG.md has no section for version $version"
+            exit 1
+          fi
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: BadBehavior-*.tar.gz
+          body_path: release-notes.md
