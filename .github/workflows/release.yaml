@@ -6,9 +6,14 @@ on:
       - 'v*.*.*'
 
 jobs:
+  route:
+    uses: RISCfuture/ci-workflows/.github/workflows/minerva-route.yml@1.1.0
+    permissions:
+      contents: read
   release:
     name: Release
-    runs-on: xcode-27
+    needs: route
+    runs-on: ${{ fromJSON(needs.route.outputs.xcode-27) }}
     permissions:
       contents: write
     steps:
